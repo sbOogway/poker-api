@@ -8,12 +8,12 @@ class HandUserBase(BaseModel):
     hand_id: str = Field(..., description="Unique identifier for the hand")
     user_id: str = Field(..., description="user we take perspective from")
 
-    timestamp: datetime = Field(..., description="When the hand was played")
+    # timestamp: datetime = Field(..., description="When the hand was played")
     site: str = Field(..., description="Poker site (e.g., PokerStars)")
     stakes: str = Field(..., description="Stakes/limits (e.g., $0.25/$0.50)")
     table_name: str = Field(..., description="Name or ID of the table")
     position: str = Field(..., description="Hero's seat position")
-    hole_cards: List[str] = Field(..., description="Hero's two hole cards")
+    hole_cards: List[str] | None = Field(..., description="Hero's two hole cards")
     # hand_text: str = Field(..., description="Raw hand history text")
 
     # Key analysis metrics

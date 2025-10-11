@@ -37,7 +37,7 @@ class HeroData:
     """Streamlined Hero-specific data for analysis"""
 
     hand_id: str
-    timestamp: datetime
+    # timestamp: datetime
     site: str
     stakes: str
     table_name: str
@@ -145,7 +145,7 @@ class HeroAnalysisParser:
         m = re.search(r"Table '([^']+)'", hand_text)
         return m.group(1) if m else ""
 
-    def extract_players(self, hand_text: str) -> str:
+    def extract_players(self, hand_text: str) -> List[str]:
         m = re.findall(r"Seat \d: (.*) \(", hand_text.split("***")[0])
         return m
 
@@ -664,7 +664,7 @@ class HeroAnalysisParser:
         try:
             # Extract basic info
             hand_id = self.extract_hand_id(hand_text)
-            timestamp = self.extract_timestamp(hand_text)
+            # timestamp = self.extract_timestamp(hand_text, timezone_name)
             site = self.extract_site(hand_text)
             table_name = self.extract_table_name(hand_text)
             stakes = self.extract_stakes(hand_text, currency)
@@ -685,7 +685,7 @@ class HeroAnalysisParser:
             return HeroData(
                 hand_id=hand_id,
                 hand_text=hand_text,
-                timestamp=timestamp,
+                # timestamp=timestamp,
                 site=site,
                 stakes=stakes,
                 table_name=table_name,
@@ -740,6 +740,9 @@ class HeroAnalysisParser:
                 table_name="",
                 position="Unknown",
                 hole_cards=[],
+                hand_text="",
+                players=[]
+
             )
 
     def parse_file_new(self, text: str) -> List[str]:

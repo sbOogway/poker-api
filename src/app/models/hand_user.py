@@ -17,12 +17,12 @@ class HandUser(Base):
     user_id: Mapped[str] = mapped_column(ForeignKey("player.id"), primary_key=True, index=True)
 
     # need to add all hero data fields
-    timestamp: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    # timestamp: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     site: Mapped[str] = mapped_column(String, nullable=False)
     stakes: Mapped[str] = mapped_column(String, nullable=False)
     table_name: Mapped[str] = mapped_column(String, nullable=False)
     position: Mapped[str] = mapped_column(String, nullable=False)
-    hole_cards: Mapped[List[str]] = mapped_column(JSON, nullable=False)
+    hole_cards: Mapped[List[str]] = mapped_column(JSON, nullable=True)
     # hand_text: Mapped[str] = mapped_column(Text, nullable=False)
 
     # Key analysis metrics

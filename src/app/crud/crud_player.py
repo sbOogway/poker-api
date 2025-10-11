@@ -6,9 +6,7 @@ from ..schemas.player import PlayerCreate, PlayerCreateInternal, PlayerRead, Pla
 
 async def select_all_player(db: AsyncSession) -> set[str]:
     stmt = select(Player.id)
-    print("debug player", stmt)
     result = await db.execute(stmt)
-    print("debug player", result)
     return set(result.scalars().all())
 
 CRUDPlayer = FastCRUD[PlayerCreate, PlayerCreateInternal, PlayerRead, PlayerUpdate, PlayerUpdateInternal, PlayerDelete]
