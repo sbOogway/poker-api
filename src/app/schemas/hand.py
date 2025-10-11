@@ -13,6 +13,17 @@ class HandBase(BaseModel):
     text: Annotated[str, Field()]
 
     time: datetime
+    currency: str
+
+    player_1: str
+    player_2: str
+    player_3: str
+    player_4: str
+    player_5: str
+    player_6: str
+    player_7: str
+    player_8: str
+    player_9: str
 
 class HandCreate(HandBase):
     pass

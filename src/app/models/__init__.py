@@ -4,3 +4,4 @@ from .rate_limit import RateLimit
 from .user import User
 from .hand import Hand
 from .hand_user import HandUser
+from .player import Player

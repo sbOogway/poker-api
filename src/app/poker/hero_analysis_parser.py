@@ -1,11 +1,14 @@
 import os
 import glob
 import re
+
 # import pandas as pd
 import logging
 from typing import Tuple, List, Optional, Dict, Any
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
+import tzlocal
 from pprint import pprint, pformat
 import traceback
 
@@ -41,6 +44,8 @@ class HeroData:
     position: str
     hole_cards: List[str]
     hand_text: str
+
+    players: List[str]
 
     # Key analysis metrics
     went_to_showdown: bool = False
@@ -115,22 +120,34 @@ class HeroAnalysisParser:
                 return site
         return "Unknown"
 
+    def extract_currency(self, hand_text: str) -> str:
+        m = re.search(r"Total pot (.)", hand_text)
+        return m.group(1)
+
     def extract_hand_id(self, hand_text: str) -> str:
         """Extract hand ID from the header"""
         m = re.search(r"Hand #([A-Z0-9]+)", hand_text)
         return m.group(1) if m else ""
 
-    def extract_timestamp(self, hand_text: str) -> datetime:
+    def extract_timestamp(self, hand_text: str, timezone_name: str) -> datetime:
         """Extract timestamp from the header"""
-        m = re.search(r"(\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2})", hand_text)
+        m = re.search(r"(\d{4}/\d{2}/\d{2} (?:\d{1}|\d{2}):\d{2}:\d{2})", hand_text)
         if m:
-            return datetime.strptime(m.group(1), "%Y/%m/%d %H:%M:%S")
+            return (
+                datetime.strptime(m.group(1), "%Y/%m/%d %H:%M:%S")
+                .replace(tzinfo=ZoneInfo(timezone_name))
+                .astimezone(timezone.utc)
+            )
         return datetime.now()
 
     def extract_table_name(self, hand_text: str) -> str:
         """Extract table name from the header"""
         m = re.search(r"Table '([^']+)'", hand_text)
         return m.group(1) if m else ""
+
+    def extract_players(self, hand_text: str) -> str:
+        m = re.findall(r"Seat \d: (.*) \(", hand_text.split("***")[0])
+        return m
 
     def extract_stakes(self, hand_text: str, currency: str) -> str:
         """Extract stakes from the header"""
@@ -369,12 +386,10 @@ class HeroAnalysisParser:
         for line in hand_text.splitlines():
 
             line = line.strip()
-            
+
             # logger.debug(f"line => {line}")
             if not line:
                 continue
-
-
 
             # Detect street changes
             if street_marker.match(line):
@@ -451,10 +466,10 @@ class HeroAnalysisParser:
                         current_round += amount
 
                 elif "calls" in line:
-                    if current_street == "preflop" :
+                    if current_street == "preflop":
                         actions["preflop_called"] = True
 
-                    if current_street == "preflop"  and preflop_bets == 0:
+                    if current_street == "preflop" and preflop_bets == 0:
                         actions["limped"] = True
 
                     if current_street == "preflop" and preflop_bets == 1:
@@ -510,7 +525,7 @@ class HeroAnalysisParser:
 
                     if current_street == "preflop" and preflop_bets == 1:
                         actions["single_raised_pot"] = True
-                        
+
                     if current_street == "preflop" and preflop_bets == 2:
                         actions["three_bet"] = True
 
@@ -655,6 +670,7 @@ class HeroAnalysisParser:
             stakes = self.extract_stakes(hand_text, currency)
             position = self.extract_hero_position(hand_text, username)
             hole_cards = self.extract_hero_hole_cards(hand_text, username)
+            players = self.extract_players(hand_text)
 
             # Extract board cards
             board_cards, flop_cards, turn_card, river_card = self.extract_board_cards(
@@ -675,6 +691,7 @@ class HeroAnalysisParser:
                 table_name=table_name,
                 position=position,
                 hole_cards=hole_cards,
+                players=players,
                 went_to_showdown=action_data["went_to_showdown"],
                 won_at_showdown=action_data["won_at_showdown"],
                 won_when_saw_flop=action_data["won_when_saw_flop"],
@@ -703,11 +720,9 @@ class HeroAnalysisParser:
                 cbet_flop_opportunity=action_data["cbet_flop_opportunity"],
                 cbet_turn_opportunity=action_data["cbet_turn_opportunity"],
                 cbet_river_opportunity=action_data["cbet_river_opportunity"],
-
                 limped=action_data["limped"],
                 called=action_data["called"],
                 serial_caller=action_data["serial_caller"],
-
                 single_raised_pot=action_data["single_raised_pot"],
                 three_bet=action_data["three_bet"],
                 four_bet=action_data["four_bet"],
@@ -727,6 +742,14 @@ class HeroAnalysisParser:
                 hole_cards=[],
             )
 
+    def parse_file_new(self, text: str) -> List[str]:
+        # hands = re.split(r"(.* Hand #.*\r\n\r\n\r\n\r\n)", text)
+        # hands = [hand for hand in hands if hand != "\ufeff"]
+        # pprint(hands)
+        return text.split("\r\n" * 4)[:-1]
+
+    # def parse_hand_from_perspective(self, hand_text: str, currency: str, username:str) -> List[HeroData]:
+
     def parse_file(self, text: str, currency: str, username: str) -> List[HeroData]:
         """Parse a file containing multiple hands"""
         try:
@@ -745,8 +768,7 @@ class HeroAnalysisParser:
 
             results = []
             # del hands[0]
-            
-            
+
             hands = [hand for hand in hands if hand != "\ufeff"]
             # logger.debug("hands dbg\n" + pformat(hands))
 
@@ -843,7 +865,7 @@ class HeroAnalysisParser:
     #                     "Five_Bet": hand.five_bet,
     #                 }
     #             )
-            
+
     #         return data
 
     #     #     df = pd.DataFrame(data)
