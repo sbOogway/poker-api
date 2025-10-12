@@ -13,6 +13,8 @@ class Player(Base):
     id : Mapped[str] = mapped_column(primary_key=True, index=True)
 
     
-    # vpip: Mapped[int] = mapped_column(Integer, default=0.0)
+    
 
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default_factory=lambda: datetime.now(UTC))
+    updated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), default=None)
 

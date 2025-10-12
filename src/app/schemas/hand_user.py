@@ -8,16 +8,9 @@ class HandUserBase(BaseModel):
     hand_id: str = Field(..., description="Unique identifier for the hand")
     user_id: str = Field(..., description="user we take perspective from")
 
-    # timestamp: datetime = Field(..., description="When the hand was played")
-    site: str = Field(..., description="Poker site (e.g., PokerStars)")
-    stakes: str = Field(..., description="Stakes/limits (e.g., $0.25/$0.50)")
-    table_name: str = Field(..., description="Name or ID of the table")
     position: str = Field(..., description="Hero's seat position")
     hole_cards: List[str] | None = Field(..., description="Hero's two hole cards")
-    # hand_text: str = Field(..., description="Raw hand history text")
 
-    # Key analysis metrics
-    went_to_showdown: bool = Field(False, description="Did the hand reach showdown")
     won_at_showdown: bool = Field(
         False, description="Won at showdown (W$SD)"
     )
@@ -46,13 +39,6 @@ class HandUserBase(BaseModel):
     flop_actions: int = Field(0, description="Number of actions on the flop")
     turn_actions: int = Field(0, description="Number of actions on the turn")
     river_actions: int = Field(0, description="Number of actions on the river")
-
-    # Board cards
-    flop_cards: List[str] = Field(
-        default_factory=list, description="Flop cards"
-    )
-    turn_card: str = Field("", description="Turn card")
-    river_card: str = Field("", description="River card")
 
     # Hand‑strength indicators
     preflop_raised: bool = Field(False, description="Raised pre‑flop")

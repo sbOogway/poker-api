@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import Annotated
+from typing import Annotated, List
 from datetime import datetime
 
 
@@ -11,6 +11,15 @@ class HandBase(BaseModel):
     time: datetime
     # timezone: str
     currency: str
+    site: str
+    stakes: str 
+    table_name: str
+
+    went_to_showdown: bool
+
+    flop_cards: List[str]
+    turn_card: str
+    river_card: str
 
     player_1: str = Field(..., description="player at 1 table")
     player_2: str = Field(..., description="player at 2 table")
