@@ -13,8 +13,8 @@ class Session(Base):
 
     id: Mapped[str] = mapped_column(String, primary_key=True)
 
-    cash_in: Mapped[Float] = mapped_column(Float)
-    cash_out: Mapped[Float] = mapped_column(Float)
+    cash_in: Mapped[Float] | None = mapped_column(Float)
+    cash_out: Mapped[Float] | None = mapped_column(Float)
 
     game: Mapped[str] = mapped_column(ForeignKey("game.name"))
     account: Mapped[str] = mapped_column(ForeignKey("account.name"))
@@ -24,5 +24,9 @@ class Session(Base):
 
     bullets: Mapped[int] | None = mapped_column(Integer)
 
+    table_name: Mapped[str] = mapped_column(String)
+
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default_factory=lambda: datetime.now(UTC))
     updated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), default=None)
+
+

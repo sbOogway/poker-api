@@ -4,9 +4,10 @@ from datetime import datetime
 
 
 
-class HandUserBase(BaseModel):
+class HandPlayerBase(BaseModel):
     hand_id: str = Field(..., description="Unique identifier for the hand")
-    user_id: str = Field(..., description="user we take perspective from")
+    player_id: str = Field(..., description="user we take perspective from")
+    session_id: str | None  = Field(..., description="session id of the user perspective")
 
     position: str = Field(..., description="Hero's seat position")
     hole_cards: List[str] | None = Field(..., description="Hero's two hole cards")
@@ -44,7 +45,9 @@ class HandUserBase(BaseModel):
     preflop_raised: bool = Field(False, description="Raised pre‑flop")
     preflop_called: bool = Field(False, description="Called pre‑flop")
     preflop_folded: bool = Field(False, description="Folded pre‑flop")
+
     vpip: bool = Field(False, description="Voluntarily Put Money In Pot")
+
     cbet_flop: bool = Field(False, description="Continuation bet on flop")
     cbet_turn: bool = Field(False, description="Continuation bet on turn")
     cbet_river: bool = Field(False, description="Continuation bet on river")
@@ -68,20 +71,20 @@ class HandUserBase(BaseModel):
     five_bet: bool = Field(False, description="Five‑bet occurred")
  
 
-class HandUserCreate(HandUserBase):
+class HandPlayerCreate(HandPlayerBase):
     pass
 
-class HandUserCreateInternal(HandUserBase):
+class HandPlayerCreateInternal(HandPlayerBase):
     pass
 
-class HandUserRead(HandUserBase):
+class HandPlayerRead(HandPlayerBase):
     pass
 
-class HandUserUpdate(HandUserBase):
+class HandPlayerUpdate(HandPlayerBase):
     pass
 
-class HandUserUpdateInternal(HandUserBase):
+class HandPlayerUpdateInternal(HandPlayerBase):
     pass
 
-class HandUserDelete(HandUserBase):
+class HandPlayerDelete(HandPlayerBase):
     pass

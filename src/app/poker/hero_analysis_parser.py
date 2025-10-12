@@ -113,6 +113,29 @@ class HeroAnalysisParser:
             "William Hill": r"William Hill",
         }
 
+    # TODO
+    # need to see other game types and extract them accordingly
+    def extract_game_mode(self, hand_text: str) -> str:
+        if "Zoom" in hand_text:
+            return "Zoom"
+        return None
+
+    # TODO
+    # need to see other game types and extract them accordingly
+    def extract_game_variant(self, hand_text: str) -> str:
+        if "Hold'em No Limit" in hand_text:
+            return "NLHE"
+        return None
+
+    # TODO
+    # rush and cash hand history from bro does not have session id
+    # maybe generate an hash based on the time of first hand and other parameters
+    # this works for italian sessions with ADM ID
+    def extract_session_id(self, hand_text: str) -> str: 
+        m = re.search(r"ADM ID: ([A-Z0-9]{16})", hand_text)
+        return m.group(1)
+
+
     def extract_site(self, hand_text: str) -> str:
         """Extract poker site from hand text"""
         for site, pattern in self.site_patterns.items():
@@ -307,6 +330,9 @@ class HeroAnalysisParser:
         # logger.debug(f"rake and pot size debug {total_rake_amount} {total_pot_size}")
 
         return total_rake_amount, total_pot_size
+
+    def extract_showdown(self, hand_text: str) -> bool:
+        return "*** SHOW DOWN ***" in hand_text
 
     def detect_multi_player_showdown(self, hand_text: str, username: str) -> bool:
         """Detect if there was a multi-player showdown (2+ players showed cards)"""

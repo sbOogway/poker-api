@@ -2,8 +2,9 @@ from fastapi import APIRouter, Depends, Request, UploadFile, File, HTTPException
 
 import traceback
 
-from ...models.hand_user import HandUser
+from ...models.hand_player import HandPlayer
 from ...models.hand import Hand
+from ...models.game import Game
 
 from ...poker.hero_analysis_parser import HeroAnalysisParser, HeroData
 
@@ -17,13 +18,19 @@ from datetime import datetime
 
 from ...core.db.database import async_get_db
 
-from ...schemas.hand import HandCreate
-from ...schemas.hand_user import HandUserCreate
+from ...schemas.hand import HandCreate, HandReadText
+from ...schemas.hand_player import HandPlayerCreate
 from ...schemas.player import PlayerCreate
+from ...schemas.game import GameCreate, GameReadCurrency
+from ...schemas.session import SessionCreate
+from ...schemas.account import AccountCreate
 
 from ...crud.crud_hand import crud_hands
-from ...crud.crud_hand_user import crud_hands_user
+from ...crud.crud_hand_player import crud_hands_player
 from ...crud.crud_player import crud_player
+from ...crud.crud_game import crud_game
+from ...crud.crud_session import crud_session
+from ...crud.crud_account import crud_account
 
 from typing import List, Set
 import asyncio
@@ -40,8 +47,6 @@ async def parse_hands(
     timezone_name: str = Query(
         "CET", description="time zone of the location where hand was played"
     ),
-    # currency: str = Query(..., description="Currency of hand in the file eg($, €)"),
-    # username: str = Query(..., description="Username of the player we get the perspective from")
 ):
 
     if file.content_type != "text/plain":
@@ -52,8 +57,60 @@ async def parse_hands(
 
     hands = parser.parse_file_new(text)
 
-    hands_in_db: Set[str] = await crud_hands.select_all_hand(db)
     players_in_db: Set[str] = await crud_player.select_all_player(db)
+    games_in_db: Set[str] = await crud_game.select_all_game(db)
+    accounts_in_db: Set[str] = await crud_account.select_all_account(db)
+
+    # extract game information and add it to table if not present
+    mode = parser.extract_game_mode(hands[0])
+    variant = parser.extract_game_variant(hands[0])
+    site = parser.extract_site(hands[0])
+    currency = parser.extract_currency(hands[0])
+    stakes = parser.extract_stakes(hands[0], currency)
+    session_id = parser.extract_session_id(hands[0])
+    start_time = parser.extract_timestamp(hands[0], timezone_name)
+    table_name = parser.extract_table_name(hands[0])
+    end_time = parser.extract_timestamp(hands[-1], timezone_name)
+
+    game_name = f"{mode.upper()}_{variant.upper()}_{stakes.upper()}_{site.upper()}"
+
+    if game_name not in games_in_db:
+        await crud_game.create(
+            db=db,
+            object=GameCreate(
+                name=game_name,
+                stakes=stakes,
+                site=site,
+                mode=mode,
+                variant=variant,
+                currency=currency,
+            ),
+        )
+
+    if site not in accounts_in_db:
+        await crud_account.create(
+            db=db,
+            object=AccountCreate(
+                name=site, initial_balance=0, currency=currency, online=True
+            ),
+        )
+
+    sessions_in_db: Set[str] = await crud_session.select_all_session(db, game_name)
+
+    if session_id not in sessions_in_db:
+        await crud_session.create(
+            db=db,
+            object=SessionCreate(
+                id=session_id,
+                game=game_name,
+                account=site,
+                start_time=start_time,
+                end_time=end_time,
+                table_name=table_name,
+            ),
+        )
+
+    hands_in_db: Set[str] = await crud_hands.select_all_hand_session_id(db, session_id)
 
     for hand in hands:
         hand_id = parser.extract_hand_id(hand)
@@ -72,8 +129,9 @@ async def parse_hands(
 
             players_in_db.add(player)
 
-        currency = parser.extract_currency(hand)
         timestamp = parser.extract_timestamp(hand, timezone_name)
+        _, flop, turn, river = parser.extract_board_cards(hand)
+        showdown = parser.extract_showdown(hand)
 
         await crud_hands.create(
             db=db,
@@ -81,8 +139,12 @@ async def parse_hands(
                 id=hand_id,
                 text=hand,
                 time=timestamp,
-                currency=currency,
-                timezone=timezone_name,
+                game=game_name,
+                session_id=session_id,
+                went_to_showdown=showdown,
+                flop_cards=flop,
+                turn_card=turn,
+                river_card=river,
                 player_1=players[0],
                 player_2=players[1],
                 player_3=players[2] if len(players) > 2 else None,
@@ -97,120 +159,82 @@ async def parse_hands(
 
     # deez nuts
     return {"filename": file.filename, "status": "got em"}
-    
-        # print(currency)
-        # print(timestamp)
-        # print(tzlocal.get_localzone_name())
-
-    # pprint(hands)
-    # print(len(hands))
-    # crud_hands
-
-    # pprint(hands)
-    # print(len(hands))
-
-    # players_in_db = await crud_player.select_all(db)
-    # print("#"*10)
-    # print("#"*10)
-    # print("#"*10)
-    # print(players_in_db)
-    # print("#"*10)
-    # print("#"*10)
-    # print("#"*10)
-
-    # players_in_hands = set()
-    # for hand in hands:
-    #     for player in hand.players:
-    #         players_in_hands.add(player)
-
-    # players_to_add = players_in_hands - players_in_db
-
-    # for player in players_to_add:
-    #     crud_player.create(db=db, object=PlayerCreate(id=player))
-
-    # hands_in_file = set(hand.hand_id for hand in hands)
-    # hands_to_add: set[HandUser] = hands_in_file - hands_in_db
-    # for hand in hands_to_add:
-    #     crud_hands.create(db=db, object=HandCreate(id=hand.hand_id, text=hand))
-
-    # users =
-
-    # for hand in hands:
-    #     # for player in hand.players:
-    #     #     try:
-    #     #         await crud_player.create(db=db, object=PlayerCreate(id=player))
-    #     #     except (IntegrityError, PendingRollbackError) as e:
-    #     #         traceback.print_exc()
-    #     #         print("hand already in database")
-    #     #         print(e.__class__.__name__)
-    #     #         print(f"{e.__class__.__module__}.{e.__class__.__qualname__}")
-    #     #         pass
-
-    #     try:
-    #         await crud_hands.create(
-    #         db=db,
-    #         object=HandCreate(
-    #             id=hand.hand_id, text=hand.hand_text, time=hand.timestamp
-    #         ),
-    #     )
-    #     except (IntegrityError, PendingRollbackError) as e:
-
-    #         # traceback.print_exc()
-    #         # print("hand already in database")
-    #         # print(e.__class__.__name__)
-    #         # print(f"{e.__class__.__module__}.{e.__class__.__qualname__}")
-    #         pass
-
-    #     await crud_hands_user.create(
-    #         db=db,
-    #         object=HandUserCreate(
-    #             hand_id=hand.hand_id,
-    #             user_id=username,
-    #             timestamp=hand.timestamp,
-    #             site=hand.site,
-    #             stakes=hand.stakes,
-    #             table_name=hand.table_name,
-    #             position=hand.position,
-    #             hole_cards=hand.hole_cards
-    #         )
-    #     )
-
-    
-
 
 @router.post("/analyze")
 async def analyze(
     db: Annotated[AsyncSession, Depends(async_get_db)],
-    username: str = Query(..., description="username of hero/villain to analyze hands")
+    username: str = Query(..., description="username of hero/villain to analyze hands"),
 ):
-    hands_player: List[Hand] = await crud_hands.select_all_hand_player(db, username)
-    pprint(hands_player)
-    print(len(hands_player))
+    # hands_player: List[Hand] = await crud_hands.select_all_hands_player(db, username)
 
-    hands_analyzed = await crud_hands_user.select_all_hand_user(db, username)
+    hands_player = await crud_hands.get_multi_joined(
+        db=db,
+        join_model=Game,
+        join_on=Game.name == Hand.game  and (Hand.player_1 == username),
+        schema_to_select=HandReadText,
+        join_schema_to_select=GameReadCurrency,
+        join_filters={"player_1": username}
+    )
+    pprint(hands_player["data"])
+    pprint(hands_player["total_count"])
+    # print(len(hands_player))
+    # return
 
-    for hand in hands_player:
+    hands_analyzed = await crud_hands_player.select_all_hand_player(db, username)
+    # pprint(hands_analyzed)
 
-        if hand.id in hands_analyzed:
+    # return
+
+    # hands_player: List[HandReadText] = hands_player["data"]
+    for hand in hands_player["data"]:
+
+        if hand["id"] in hands_analyzed:
             continue
 
-        parsed_hand: HeroData = parser.parse_hand(hand_text=hand.text, username=username, currency=hand.currency)
+        parsed_hand: HeroData = parser.parse_hand(
+            hand_text=hand["text"], username=username, currency=hand["currency"]
+        )
 
-        await crud_hands_user.create(db, object=HandUserCreate(
-            hand_id=hand.id, 
-            user_id=username,
-            site=parsed_hand.site,
-            stakes=parsed_hand.stakes,
-            table_name=parsed_hand.table_name,
-            position=parsed_hand.position,
-            hole_cards=parsed_hand.hole_cards,
-            net_profit=parsed_hand.net_profit,
-            net_profit_before_rake=parsed_hand.net_profit_before_rake,
-            rake_amount=parsed_hand.rake_amount,
-            total_pot_size=parsed_hand.total_pot_size
-            
-
-
-        ))
+        await crud_hands_player.create(
+            db,
+            object=HandPlayerCreate(
+                hand_id=hand["id"],
+                player_id=username,
+                session_id=hand["session_id"],
+                position=parsed_hand.position,
+                hole_cards=parsed_hand.hole_cards,
+                won_at_showdown=parsed_hand.won_at_showdown,
+                won_when_saw_flop=parsed_hand.won_when_saw_flop,
+                saw_flop=parsed_hand.saw_flop,
+                total_contributed=parsed_hand.total_contributed,
+                total_collected=parsed_hand.total_collected,
+                net_profit=parsed_hand.net_profit,
+                net_profit_after_rake=parsed_hand.net_profit_after_rake,
+                net_profit_before_rake=parsed_hand.net_profit_before_rake,
+                rake_amount=parsed_hand.rake_amount,
+                total_pot_size=parsed_hand.total_pot_size,
+                preflop_actions=parsed_hand.preflop_actions,
+                flop_actions=parsed_hand.flop_actions,
+                turn_actions=parsed_hand.turn_actions,
+                river_actions=parsed_hand.river_actions,
+                preflop_raised=parsed_hand.preflop_raised,
+                preflop_called=parsed_hand.preflop_called,
+                preflop_folded=parsed_hand.preflop_folded,
+                vpip=parsed_hand.vpip,
+                cbet_flop=parsed_hand.cbet_flop,
+                cbet_turn=parsed_hand.cbet_turn,
+                cbet_river=parsed_hand.cbet_river,
+                cbet_flop_opportunity=parsed_hand.cbet_flop_opportunity,
+                cbet_turn_opportunity=parsed_hand.cbet_turn_opportunity,
+                cbet_river_opportunity=parsed_hand.cbet_river_opportunity,
+                limped=parsed_hand.limped,
+                called=parsed_hand.called,
+                serial_caller=parsed_hand.serial_caller,
+                single_raised_pot=parsed_hand.single_raised_pot,
+                three_bet=parsed_hand.three_bet,
+                four_bet=parsed_hand.four_bet,
+                five_bet=parsed_hand.five_bet,
+            ),
+        )
 
     return {"status": "success"}

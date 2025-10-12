@@ -9,11 +9,9 @@ class HandBase(BaseModel):
     text: Annotated[str, Field()]
 
     time: datetime
-    # timezone: str
-    currency: str
-    site: str
-    stakes: str 
-    table_name: str
+
+    game: str
+    session_id: str
 
     went_to_showdown: bool
 
@@ -31,6 +29,10 @@ class HandBase(BaseModel):
     player_8: str | None = Field(..., description="player at 8 table")
     player_9: str | None = Field(..., description="player at 9 table")
 
+class HandReadText(BaseModel):
+    text: str
+    id: str
+    session_id: str
 
 class HandCreate(HandBase):
     pass

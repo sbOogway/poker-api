@@ -3,6 +3,7 @@ from fastcrud import FastCRUD
 from sqlalchemy import select, or_, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 from ..models.hand import Hand
+from ..models.game import Game
 from ..schemas.hand import (
     HandCreate,
     HandCreateInternal,
@@ -18,9 +19,13 @@ async def select_all_hand(db: AsyncSession) -> set[str]:
     result = await db.execute(stmt)
     return set(result.scalars().all())
 
+async def select_all_hand_session_id(db: AsyncSession, session_id: str) -> set[str]:
+    stmt = select(Hand.id).where(Hand.session_id == session_id)
+    result = await db.execute(stmt)
+    return set(result.scalars().all())
 
 async def select_all_hand_player(db: AsyncSession, player: str) -> set[Hand]:
-    stmt = select(Hand).where(
+    stmt = select(Hand).join(Hand.game).where(
         or_(
             Hand.player_1 == player,
             Hand.player_2 == player,
@@ -37,12 +42,17 @@ async def select_all_hand_player(db: AsyncSession, player: str) -> set[Hand]:
     # print(result.scalars().all())
     return result.scalars().all()
 
+async def select_all_hand_game():
+    pass
+
 
 CRUDHand = FastCRUD[
     HandCreate, HandCreateInternal, HandRead, HandUpdate, HandUpdateInternal, HandDelete
 ]
 
 CRUDHand.select_all_hand = staticmethod(select_all_hand)
-CRUDHand.select_all_hand_player = staticmethod(select_all_hand_player)
+CRUDHand.select_all_hands_player = staticmethod(select_all_hand_player)
+CRUDHand.select_all_hand_session_id = staticmethod(select_all_hand_session_id)
+
 
 crud_hands = CRUDHand(Hand)

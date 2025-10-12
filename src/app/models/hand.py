@@ -17,10 +17,8 @@ class Hand(Base):
 
     time: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
-    currency: Mapped[str] = mapped_column(String(4))
-    site: Mapped[str] = mapped_column(String(32))
-    stakes: Mapped[str] = mapped_column(String(32))
-    table_name: Mapped[str] = mapped_column(String(32))
+    game: Mapped[str] = mapped_column(ForeignKey("game.name"))
+    session_id: Mapped[str] = mapped_column(ForeignKey("session.id"))
 
     went_to_showdown: Mapped[bool] = mapped_column(Boolean, default=False)
 

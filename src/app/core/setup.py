@@ -12,7 +12,6 @@ from fastapi.openapi.docs import get_redoc_html, get_swagger_ui_html
 from fastapi.openapi.utils import get_openapi
 
 from ..api.dependencies import get_current_superuser
-from ..core.utils.rate_limit import rate_limiter
 from ..middleware.client_cache_middleware import ClientCacheMiddleware
 from ..models import *  # noqa: F403
 from .config import (
@@ -58,16 +57,6 @@ async def close_redis_queue_pool() -> None:
         await queue.pool.aclose()  # type: ignore
 
 
-# -------------- rate limit --------------
-async def create_redis_rate_limit_pool() -> None:
-    rate_limiter.initialize(settings.REDIS_RATE_LIMIT_URL)  # type: ignore
-
-
-async def close_redis_rate_limit_pool() -> None:
-    if rate_limiter.client is not None:
-        await rate_limiter.client.aclose()  # type: ignore
-
-
 # -------------- application --------------
 async def set_threadpool_tokens(number_of_tokens: int = 100) -> None:
     limiter = anyio.to_thread.current_default_thread_limiter()
@@ -104,9 +93,6 @@ def lifespan_factory(
             if isinstance(settings, RedisQueueSettings):
                 await create_redis_queue_pool()
 
-            if isinstance(settings, RedisRateLimiterSettings):
-                await create_redis_rate_limit_pool()
-
             if create_tables_on_start:
                 await create_tables()
 
@@ -120,9 +106,6 @@ def lifespan_factory(
 
             if isinstance(settings, RedisQueueSettings):
                 await close_redis_queue_pool()
-
-            if isinstance(settings, RedisRateLimiterSettings):
-                await close_redis_rate_limit_pool()
 
     return lifespan
 

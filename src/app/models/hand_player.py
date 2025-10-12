@@ -10,11 +10,12 @@ from datetime import UTC, datetime
 """
 Hand seen by the perspective of each user in a hand
 """
-class HandUser(Base):
-    __tablename__ = "hand_user"
+class HandPlayer(Base):
+    __tablename__ = "hand_player"
 
     hand_id: Mapped[str] = mapped_column(ForeignKey("hand.id"), primary_key=True, index=True)
-    user_id: Mapped[str] = mapped_column(ForeignKey("player.id"), primary_key=True, index=True)
+    player_id: Mapped[str] = mapped_column(ForeignKey("player.id"), primary_key=True, index=True)
+    session_id: Mapped[str] | None = mapped_column(ForeignKey("session.id"))
 
     position: Mapped[str] = mapped_column(String, nullable=False)
     hole_cards: Mapped[List[str]] | None = mapped_column(JSON, nullable=True)

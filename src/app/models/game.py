@@ -19,6 +19,7 @@ class Game(Base):
 
     # cash game, mtt, zoom
     mode: Mapped[str] | None = mapped_column(String)
+
     # plo, 6max, nlhe
     variant: Mapped[str] | None = mapped_column(String)
 
