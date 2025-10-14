@@ -18,8 +18,8 @@ from datetime import datetime
 
 from ...core.db.database import async_get_db
 
-from ...schemas.hand import HandCreate, HandReadText
-from ...schemas.hand_player import HandPlayerCreate
+from ...schemas.hand import HandCreate, HandReadText, HandBase
+from ...schemas.hand_player import HandPlayerCreate, HandPlayerBase
 from ...schemas.player import PlayerCreate
 from ...schemas.game import GameCreate, GameReadCurrency
 from ...schemas.session import SessionCreate
@@ -278,3 +278,19 @@ async def analyze_all(
 
 
     return {"status": "success"}
+
+
+@router.get("/get")
+async def get(
+    db: Annotated[AsyncSession, Depends(async_get_db)], 
+    username: str = Query(..., description="username of the player to get the hands from")
+):
+    hands = await crud_hands_player.get_multi_joined(
+        db=db,
+        join_model=Hand,
+        schema_to_select=HandPlayerBase,
+        join_schema_to_select=HandBase,
+        player_id__like=username
+    )
+
+    return hands
