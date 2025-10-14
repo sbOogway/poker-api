@@ -5,6 +5,7 @@ import traceback
 from ...models.hand_player import HandPlayer
 from ...models.hand import Hand
 from ...models.game import Game
+from ...models.player import Player
 
 from ...poker.hero_analysis_parser import HeroAnalysisParser, HeroData
 
@@ -12,7 +13,6 @@ from ...poker.hero_analysis_parser import HeroAnalysisParser, HeroData
 from pprint import pprint
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import PendingRollbackError, IntegrityError
-from typing import Annotated
 from datetime import datetime
 
 
@@ -32,7 +32,7 @@ from ...crud.crud_game import crud_game
 from ...crud.crud_session import crud_session
 from ...crud.crud_account import crud_account
 
-from typing import List, Set
+from typing import List, Set, Annotated
 import asyncio
 
 parser = HeroAnalysisParser()
@@ -132,6 +132,8 @@ async def parse_hands(
         timestamp = parser.extract_timestamp(hand, timezone_name)
         _, flop, turn, river = parser.extract_board_cards(hand)
         showdown = parser.extract_showdown(hand)
+        rake, pot = parser.extract_rake_info(hand, currency)
+
 
         await crud_hands.create(
             db=db,
@@ -145,6 +147,8 @@ async def parse_hands(
                 flop_cards=flop,
                 turn_card=turn,
                 river_card=river,
+                rake_amount=rake, 
+                total_pot_size=pot,
                 player_1=players[0],
                 player_2=players[1],
                 player_3=players[2] if len(players) > 2 else None,
@@ -160,26 +164,33 @@ async def parse_hands(
     # deez nuts
     return {"filename": file.filename, "status": "got em"}
 
-@router.post("/analyze")
-async def analyze(
-    db: Annotated[AsyncSession, Depends(async_get_db)],
-    username: str = Query(..., description="username of hero/villain to analyze hands"),
-):
-    # hands_player: List[Hand] = await crud_hands.select_all_hands_player(db, username)
 
+async def analyze_player(db: Annotated[AsyncSession, Depends(async_get_db)], username: str):
     hands_player = await crud_hands.get_multi_joined(
         db=db,
         join_model=Game,
-        join_on=Game.name == Hand.game  and (Hand.player_1 == username),
+        # join_on=Game.name == Hand.game  and (Hand.player_1 == username),
         schema_to_select=HandReadText,
         join_schema_to_select=GameReadCurrency,
-        join_filters={"player_1": username}
+        _or={
+            "player_1__like": username,
+            "player_2__like": username,
+            "player_3__like": username,
+            "player_4__like": username,
+            "player_5__like": username,
+            "player_6__like": username,
+            "player_7__like": username,
+            "player_8__like": username,
+            "player_9__like": username,
+        }
+        
     )
-    pprint(hands_player["data"])
-    pprint(hands_player["total_count"])
+    # pprint(hands_player["data"])
+    # pprint(hands_player["total_count"])
     # print(len(hands_player))
     # return
 
+    # return
     hands_analyzed = await crud_hands_player.select_all_hand_player(db, username)
     # pprint(hands_analyzed)
 
@@ -194,6 +205,9 @@ async def analyze(
         parsed_hand: HeroData = parser.parse_hand(
             hand_text=hand["text"], username=username, currency=hand["currency"]
         )
+
+        if hand["went_to_showdown"] and not parsed_hand.hole_cards:
+            parsed_hand.hole_cards = parser.extract_hole_cards_showdown(hand["text"], username)
 
         await crud_hands_player.create(
             db,
@@ -211,8 +225,8 @@ async def analyze(
                 net_profit=parsed_hand.net_profit,
                 net_profit_after_rake=parsed_hand.net_profit_after_rake,
                 net_profit_before_rake=parsed_hand.net_profit_before_rake,
-                rake_amount=parsed_hand.rake_amount,
-                total_pot_size=parsed_hand.total_pot_size,
+                # rake_amount=parsed_hand.rake_amount,
+                # total_pot_size=parsed_hand.total_pot_size,
                 preflop_actions=parsed_hand.preflop_actions,
                 flop_actions=parsed_hand.flop_actions,
                 turn_actions=parsed_hand.turn_actions,
@@ -236,5 +250,31 @@ async def analyze(
                 five_bet=parsed_hand.five_bet,
             ),
         )
+
+    return True
+
+
+
+@router.post("/analyze")
+async def analyze(
+    db: Annotated[AsyncSession, Depends(async_get_db)],
+    username: str = Query(..., description="username of hero/villain to analyze hands"),
+):
+    if analyze_player(db, username):
+        return {"status": "success"}
+    return {"status": "failure"}
+
+@router.post("/analyze_all")
+async def analyze_all(
+    db: Annotated[AsyncSession, Depends(async_get_db)],
+):
+    players = await crud_player.select_all_player(db)
+
+    pprint(players)
+
+    for player in players:
+        if not await analyze_player(db, player):
+            return {"status": "failure"}
+
 
     return {"status": "success"}

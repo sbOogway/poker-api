@@ -19,6 +19,11 @@ class HandBase(BaseModel):
     turn_card: str
     river_card: str
 
+
+    total_pot_size: float = Field(0.0, description="Total size of the pot")
+
+    rake_amount: float = Field(0.0, description="Rake taken from the pot")
+
     player_1: str = Field(..., description="player at 1 table")
     player_2: str = Field(..., description="player at 2 table")
     player_3: str | None = Field(..., description="player at 3 table")
@@ -33,6 +38,7 @@ class HandReadText(BaseModel):
     text: str
     id: str
     session_id: str
+    went_to_showdown: bool
 
 class HandCreate(HandBase):
     pass

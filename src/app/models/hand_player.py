@@ -28,10 +28,10 @@ class HandPlayer(Base):
     total_collected: Mapped[float] = mapped_column(Float, default=0.0)
     net_profit: Mapped[float] = mapped_column(Float, default=0.0)
 
-    rake_amount: Mapped[float] = mapped_column(Float, default=0.0)
+    
     net_profit_before_rake: Mapped[float] = mapped_column(Float, default=0.0)
     net_profit_after_rake: Mapped[float] = mapped_column(Float, default=0.0)
-    total_pot_size: Mapped[float] = mapped_column(Float, default=0.0)
+    
 
     preflop_actions: Mapped[int] = mapped_column(Integer, default=0)
     flop_actions: Mapped[int] = mapped_column(Integer, default=0)

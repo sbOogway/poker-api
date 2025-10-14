@@ -26,14 +26,14 @@ class HandPlayerBase(BaseModel):
     net_profit: float = Field(0.0, description="Net profit (collected‑contributed)")
 
     # Rake analysis
-    rake_amount: float = Field(0.0, description="Rake taken from the pot")
+    
     net_profit_before_rake: float = Field(
         0.0, description="Profit before rake deduction"
     )
     net_profit_after_rake: float = Field(
         0.0, description="Profit after rake deduction"
     )
-    total_pot_size: float = Field(0.0, description="Total size of the pot")
+    
 
     # Hand progression (action counts per street)
     preflop_actions: int = Field(0, description="Number of actions pre‑flop")

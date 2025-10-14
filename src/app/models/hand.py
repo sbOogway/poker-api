@@ -1,6 +1,6 @@
 from ..core.db.database import Base
 
-from sqlalchemy import DateTime, ForeignKey, String, Boolean, JSON
+from sqlalchemy import DateTime, ForeignKey, String, Boolean, JSON, Float
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -25,6 +25,10 @@ class Hand(Base):
     flop_cards: Mapped[List[str]] | None = mapped_column(JSON, default=list)
     turn_card: Mapped[str] | None = mapped_column(String, default="")
     river_card: Mapped[str] | None = mapped_column(String, default="")
+
+
+    total_pot_size: Mapped[float] = mapped_column(Float, default=0.0)
+    rake_amount: Mapped[float] = mapped_column(Float, default=0.0)
 
     player_1: Mapped[str] = mapped_column(
         ForeignKey("player.id"), default=None, nullable=False

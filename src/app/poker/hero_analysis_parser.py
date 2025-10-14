@@ -131,10 +131,9 @@ class HeroAnalysisParser:
     # rush and cash hand history from bro does not have session id
     # maybe generate an hash based on the time of first hand and other parameters
     # this works for italian sessions with ADM ID
-    def extract_session_id(self, hand_text: str) -> str: 
+    def extract_session_id(self, hand_text: str) -> str:
         m = re.search(r"ADM ID: ([A-Z0-9]{16})", hand_text)
         return m.group(1)
-
 
     def extract_site(self, hand_text: str) -> str:
         """Extract poker site from hand text"""
@@ -217,6 +216,16 @@ class HeroAnalysisParser:
             return positions[index]
 
         return "Unknown"
+
+    def extract_hole_cards_showdown(self, hand_text: str, username) -> List[str]:
+        # print("debug extract hole cards showdown 1")
+
+        if not "*** SHOW DOWN ***" in hand_text:
+            return []
+
+        m = re.search(username + r": shows\s*\[([^\]]+)\]", hand_text, re.IGNORECASE)
+        # print("debug extract hole cards showdown 2")
+        return m.group(1).strip().split() if m else []
 
     def extract_hero_hole_cards(self, hand_text: str, username: str) -> List[str]:
         """Extract Hero's hole cards"""
@@ -767,8 +776,7 @@ class HeroAnalysisParser:
                 position="Unknown",
                 hole_cards=[],
                 hand_text="",
-                players=[]
-
+                players=[],
             )
 
     def parse_file_new(self, text: str) -> List[str]:
