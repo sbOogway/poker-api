@@ -74,7 +74,7 @@ This README provides a quick reference for LLMs and developers, but the full doc
 <br>
 
 ## 1. Features
-
+ 
 - ⚡️ Fully async
 - 🚀 Pydantic V2 and SQLAlchemy 2.0
 - 🔐 User authentication with JWT
