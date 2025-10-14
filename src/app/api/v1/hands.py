@@ -283,14 +283,16 @@ async def analyze_all(
 @router.get("/get")
 async def get(
     db: Annotated[AsyncSession, Depends(async_get_db)], 
-    username: str = Query(..., description="username of the player to get the hands from")
+    player_id: str = Query(..., description="username of the player to get the hands from"),
+    session_id: str = Query(True, description="session to retrieve hands from")
 ):
     hands = await crud_hands_player.get_multi_joined(
         db=db,
         join_model=Hand,
         schema_to_select=HandPlayerBase,
         join_schema_to_select=HandBase,
-        player_id__like=username
+        player_id__like=player_id,
+        session_id__like=session_id
     )
 
     return hands
