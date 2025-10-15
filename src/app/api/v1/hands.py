@@ -182,7 +182,8 @@ async def analyze_player(db: Annotated[AsyncSession, Depends(async_get_db)], use
             "player_7__like": username,
             "player_8__like": username,
             "player_9__like": username,
-        }
+        },
+        limit=1000
         
     )
     # pprint(hands_player["data"])
@@ -192,7 +193,7 @@ async def analyze_player(db: Annotated[AsyncSession, Depends(async_get_db)], use
 
     # return
     hands_analyzed = await crud_hands_player.select_all_hand_player(db, username)
-    # pprint(hands_analyzed)
+    pprint(len(hands_analyzed))
 
     # return
 
@@ -260,7 +261,7 @@ async def analyze(
     db: Annotated[AsyncSession, Depends(async_get_db)],
     username: str = Query(..., description="username of hero/villain to analyze hands"),
 ):
-    if analyze_player(db, username):
+    if await analyze_player(db, username):
         return {"status": "success"}
     return {"status": "failure"}
 
@@ -292,7 +293,8 @@ async def get(
         schema_to_select=HandPlayerBase,
         join_schema_to_select=HandBase,
         player_id__like=player_id,
-        session_id__like=session_id
+        session_id__like=session_id,
+        limit=1000
     )
 
     return hands
