@@ -11,7 +11,7 @@ from zoneinfo import ZoneInfo
 import tzlocal
 from pprint import pprint, pformat
 import traceback
-
+from decimal import Decimal
 
 # logger = logging.getLogger(__name__)
 # logger.setLevel(logging.DEBUG)
@@ -54,15 +54,15 @@ class HeroData:
     saw_flop: bool = False
 
     # Financial data
-    total_contributed: float = 0.0
-    total_collected: float = 0.0
-    net_profit: float = 0.0
+    total_contributed: Decimal = Decimal(0.0)
+    total_collected: Decimal = Decimal(0.0)
+    net_profit: Decimal = Decimal(0.0)
 
     # Rake analysis
-    rake_amount: float = 0.0
-    net_profit_before_rake: float = 0.0
-    net_profit_after_rake: float = 0.0
-    total_pot_size: float = 0.0
+    rake_amount: Decimal = Decimal(0.0)
+    net_profit_before_rake: Decimal = Decimal(0.0)
+    net_profit_after_rake: Decimal = Decimal(0.0)
+    total_pot_size: Decimal = Decimal(0.0)
 
     # Hand progression
     preflop_actions: int = 0
@@ -272,10 +272,10 @@ class HeroAnalysisParser:
         )
         return board_cards, flop_cards, turn_card, river_card
 
-    def extract_rake_info(self, hand_text: str, currency: str) -> Tuple[float, float]:
+    def extract_rake_info(self, hand_text: str, currency: str) -> Tuple[Decimal, Decimal]:
         """Extract total rake amount (including jackpot and other fees) and total pot size from summary"""
-        total_rake_amount = 0.0
-        total_pot_size = 0.0
+        total_rake_amount = Decimal(0.0)
+        total_pot_size = Decimal(0.0)
 
         # Look for comprehensive summary line with all fees
         # Format: "Total pot $X.XX | Rake $Y.YY | Jackpot $Z.ZZ | Bingo $A.AA | Fortune $B.BB | Tax $C.CC"
@@ -287,20 +287,13 @@ class HeroAnalysisParser:
         m = re.search(comprehensive_pattern, hand_text, re.IGNORECASE)
 
         if m:
-            total_pot_size = float(m.group(1))
-            rake_amount = float(m.group(2))
-            jackpot_amount = float(m.group(3)) if m.group(3) else 0.0
-            bingo_amount = float(m.group(4)) if m.group(4) else 0.0
-            fortune_amount = float(m.group(5)) if m.group(5) else 0.0
-            tax_amount = float(m.group(6)) if m.group(6) else 0.0
+            total_pot_size = Decimal(m.group(1))
+            rake_amount = Decimal(m.group(2))
 
             # Sum all fees as total rake
             total_rake_amount = (
                 rake_amount
-                + jackpot_amount
-                + bingo_amount
-                + fortune_amount
-                + tax_amount
+
             )
         else:
             # Fallback: Look for individual fee patterns
@@ -319,7 +312,7 @@ class HeroAnalysisParser:
             for pattern, fee_type in fee_patterns:
                 m = re.search(pattern, hand_text, re.IGNORECASE)
                 if m:
-                    amount = float(m.group(1))
+                    amount = Decimal(m.group(1))
                     total_rake_amount += amount
 
             # Try to find total pot size separately
@@ -333,7 +326,7 @@ class HeroAnalysisParser:
             for pattern in pot_patterns:
                 m = re.search(pattern, hand_text, re.IGNORECASE)
                 if m:
-                    total_pot_size = float(m.group(1))
+                    total_pot_size = Decimal(m.group(1))
                     break
 
         # logger.debug(f"rake and pot size debug {total_rake_amount} {total_pot_size}")
@@ -375,8 +368,8 @@ class HeroAnalysisParser:
         street_marker = re.compile(r"^\*\*\*")
 
         actions = {
-            "total_contributed": 0.0,
-            "total_collected": 0.0,
+            "total_contributed": Decimal(0.0),
+            "total_collected": Decimal(0.0),
             "preflop_actions": 0,
             "flop_actions": 0,
             "turn_actions": 0,
@@ -394,8 +387,8 @@ class HeroAnalysisParser:
             "went_to_showdown": False,
             "won_at_showdown": False,  # W$SD - Won at Showdown (boolean)
             "saw_flop": False,
-            "rake_amount": 0.0,
-            "total_pot_size": 0.0,
+            "rake_amount": Decimal(0.0),
+            "total_pot_size": Decimal(0.0),
             "limped": False,
             "called": False,
             "serial_caller": False,
@@ -406,7 +399,7 @@ class HeroAnalysisParser:
         }
 
         current_street = "preflop"
-        current_round = 0.0
+        current_round = Decimal(0.0)
 
         # C-bet tracking variables
         last_aggressor_by_street = {"preflop": "", "flop": "", "turn": "", "river": ""}
@@ -456,7 +449,7 @@ class HeroAnalysisParser:
                     else:
                         current_street = street_line.lower()
 
-                    current_round = 0.0
+                    current_round = Decimal(0.0)
                 continue
 
             if hero_pattern.search(line):
@@ -484,7 +477,7 @@ class HeroAnalysisParser:
                         )
 
                     if m:
-                        amount = float(m.group(1))
+                        amount = Decimal(m.group(1))
                         actions["total_collected"] += amount
                         # W$SD only counts if there was a multi-player showdown
                         # This will be set later when we detect showdown patterns
@@ -496,7 +489,7 @@ class HeroAnalysisParser:
                         m = re.search(currency + r"([\d.]+)", line, re.IGNORECASE)
 
                     if m:
-                        amount = float(m.group(1))
+                        amount = Decimal(m.group(1))
                         actions["total_contributed"] += amount
                         current_round += amount
 
@@ -518,7 +511,7 @@ class HeroAnalysisParser:
                     if currency != "$":
                         m = re.search(currency + r"([\d.]+)", line, re.IGNORECASE)
                     if m:
-                        amount = float(m.group(1))
+                        amount = Decimal(m.group(1))
                         actions["total_contributed"] += amount
                         current_round += amount
 
@@ -528,7 +521,7 @@ class HeroAnalysisParser:
                     if currency != "$":
                         m = re.search(currency + r"([\d.]+)", line, re.IGNORECASE)
                     if m:
-                        amount = float(m.group(1))
+                        amount = Decimal(m.group(1))
                         actions["total_contributed"] += amount
                         current_round += amount
 
@@ -577,7 +570,7 @@ class HeroAnalysisParser:
                             r"to " + currency + r"([\d.]+)", line, re.IGNORECASE
                         )
                     if m:
-                        new_total = float(m.group(1))
+                        new_total = Decimal(m.group(1))
                         additional = new_total - current_round
                         if additional < 0:
                             additional = 0
@@ -634,7 +627,7 @@ class HeroAnalysisParser:
                 for pattern in patterns:
                     m = re.search(pattern, line, re.IGNORECASE)
                     if m:
-                        amount = float(m.group(1))
+                        amount = Decimal(m.group(1))
                         actions["total_collected"] += amount
                         break  # Found match, stop searching
 
@@ -817,109 +810,6 @@ class HeroAnalysisParser:
         except Exception as e:
             # logger.error(f"Error parsing file: {e}")
             return []
-
-    # def process_files(
-    #     self, folder_path: str, currency: str, username: str
-    # ) -> pd.DataFrame:
-    #     """Process all hand history files and return a DataFrame"""
-    #     try:
-    #         file_pattern = os.path.join(folder_path, "**", "*.txt")
-    #         all_files = glob.glob(file_pattern, recursive=True)
-
-    #         if not all_files:
-    #             logger.warning(f"No .txt files found in {folder_path}")
-    #             return pd.DataFrame()
-
-    #         logger.info(f"Found {len(all_files)} files to process")
-
-    #         all_hands = []
-
-    #         for filepath in all_files:
-    #             try:
-    #                 logger.info(f"Processing file: {os.path.basename(filepath)}")
-    #                 with open(filepath, "r", encoding="utf-8") as f:
-    #                     text = f.read()
-
-    #                 hands = self.parse_file(text, currency=currency, username=username)
-    #                 all_hands.extend(hands)
-
-    #             except Exception as e:
-    #                 logger.error(f"Error processing file {filepath}: {e}")
-    #                 continue
-
-    #         if not all_hands:
-    #             logger.warning("No hands processed")
-    #             return pd.DataFrame()
-
-    #         # Convert to DataFrame
-    #         data = []
-    #         for hand in all_hands:
-    #             data.append(
-    #                 {
-    #                     "Hand_ID": hand.hand_id,
-    #                     "Timestamp": hand.timestamp,
-    #                     "Site": hand.site,
-    #                     "Stakes": hand.stakes,
-    #                     "Table_Name": hand.table_name,
-    #                     "Position": hand.position,
-    #                     "Hole_Cards": " ".join(hand.hole_cards),
-    #                     "Went_to_Showdown": hand.went_to_showdown,
-    #                     "Won_at_Showdown": hand.won_at_showdown,
-    #                     "Won_When_Saw_Flop": hand.won_when_saw_flop,
-    #                     "Saw_Flop": hand.saw_flop,
-    #                     "Total_Contributed": hand.total_contributed,
-    #                     "Total_Collected": hand.total_collected,
-    #                     "Net_Profit": hand.net_profit,
-    #                     "Rake_Amount": hand.rake_amount,
-    #                     "Net_Profit_Before_Rake": hand.net_profit_before_rake,
-    #                     "Net_Profit_After_Rake": hand.net_profit_after_rake,
-    #                     "Total_Pot_Size": hand.total_pot_size,
-    #                     "Preflop_Actions": hand.preflop_actions,
-    #                     "Flop_Actions": hand.flop_actions,
-    #                     "Turn_Actions": hand.turn_actions,
-    #                     "River_Actions": hand.river_actions,
-    #                     "Flop_Cards": " ".join(hand.flop_cards),
-    #                     "Turn_Card": hand.turn_card,
-    #                     "River_Card": hand.river_card,
-    #                     "Preflop_Raised": hand.preflop_raised,
-    #                     "Preflop_Called": hand.preflop_called,
-    #                     "Preflop_Folded": hand.preflop_folded,
-    #                     "VPIP": hand.vpip,
-    #                     "CBet_Flop": hand.cbet_flop,
-    #                     "CBet_Turn": hand.cbet_turn,
-    #                     "CBet_River": hand.cbet_river,
-    #                     "CBet_Flop_Opportunity": hand.cbet_flop_opportunity,
-    #                     "CBet_Turn_Opportunity": hand.cbet_turn_opportunity,
-    #                     "CBet_River_Opportunity": hand.cbet_river_opportunity,
-
-    #                     "Limped": hand.limped,
-    #                     "Called": hand.called,
-    #                     "Serial_Caller": hand.serial_caller,
-
-    #                     "Single_Raised_Pot": hand.single_raised_pot,
-    #                     "Three_Bet": hand.three_bet,
-    #                     "Four_Bet": hand.four_bet,
-    #                     "Five_Bet": hand.five_bet,
-    #                 }
-    #             )
-
-    #         return data
-
-    #     #     df = pd.DataFrame(data)
-    #     #     df = df.sort_values("Timestamp")
-
-    #     #     # Add running totals
-    #     #     df["Running_Profit"] = df["Net_Profit"].cumsum()
-    #     #     df["Running_Profit_Before_Rake"] = df["Net_Profit_Before_Rake"].cumsum()
-    #     #     df["Running_Rake"] = df["Rake_Amount"].cumsum()
-    #     #     df["Hand_Number"] = range(1, len(df) + 1)
-
-    #     #     logger.info(f"Successfully processed {len(df)} hands")
-    #     #     return df
-
-    #     except Exception as e:
-    #     #     logger.error(f"Error in process_files: {e}")
-    #         return []
 
 
 def main():
