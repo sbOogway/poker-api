@@ -134,7 +134,6 @@ async def parse_hands(
         showdown = parser.extract_showdown(hand)
         rake, pot = parser.extract_rake_info(hand, currency)
 
-
         await crud_hands.create(
             db=db,
             object=HandCreate(
@@ -147,7 +146,7 @@ async def parse_hands(
                 flop_cards=flop,
                 turn_card=turn,
                 river_card=river,
-                rake_amount=rake, 
+                rake_amount=rake,
                 total_pot_size=pot,
                 player_1=players[0],
                 player_2=players[1],
@@ -165,7 +164,9 @@ async def parse_hands(
     return {"filename": file.filename, "status": "got em"}
 
 
-async def analyze_player(db: Annotated[AsyncSession, Depends(async_get_db)], username: str):
+async def analyze_player(
+    db: Annotated[AsyncSession, Depends(async_get_db)], username: str
+):
     hands_player = await crud_hands.get_multi_joined(
         db=db,
         join_model=Game,
@@ -183,8 +184,7 @@ async def analyze_player(db: Annotated[AsyncSession, Depends(async_get_db)], use
             "player_8__like": username,
             "player_9__like": username,
         },
-        limit=1000
-        
+        limit=None,
     )
     # pprint(hands_player["data"])
     # pprint(hands_player["total_count"])
@@ -208,7 +208,9 @@ async def analyze_player(db: Annotated[AsyncSession, Depends(async_get_db)], use
         )
 
         if hand["went_to_showdown"] and not parsed_hand.hole_cards:
-            parsed_hand.hole_cards = parser.extract_hole_cards_showdown(hand["text"], username)
+            parsed_hand.hole_cards = parser.extract_hole_cards_showdown(
+                hand["text"], username
+            )
 
         await crud_hands_player.create(
             db,
@@ -255,7 +257,6 @@ async def analyze_player(db: Annotated[AsyncSession, Depends(async_get_db)], use
     return True
 
 
-
 @router.post("/analyze")
 async def analyze(
     db: Annotated[AsyncSession, Depends(async_get_db)],
@@ -264,6 +265,7 @@ async def analyze(
     if await analyze_player(db, username):
         return {"status": "success"}
     return {"status": "failure"}
+
 
 @router.post("/analyze_all")
 async def analyze_all(
@@ -277,24 +279,33 @@ async def analyze_all(
         if not await analyze_player(db, player):
             return {"status": "failure"}
 
-
     return {"status": "success"}
 
 
 @router.get("/get")
 async def get(
-    db: Annotated[AsyncSession, Depends(async_get_db)], 
-    player_id: str = Query(..., description="username of the player to get the hands from"),
-    session_id: str = Query(True, description="session to retrieve hands from")
+    db: Annotated[AsyncSession, Depends(async_get_db)],
+    player_id: str = Query(
+        ..., description="username of the player to get the hands from"
+    ),
+    session_id: str = Query("all", description="session to retrieve hands from"),
 ):
-    hands = await crud_hands_player.get_multi_joined(
+    base_kwargs = dict(
         db=db,
         join_model=Hand,
         schema_to_select=HandPlayerBase,
         join_schema_to_select=HandBase,
         player_id__like=player_id,
-        session_id__like=session_id,
-        limit=1000
+        limit=None,
+        sort_columns="time",
+        sort_orders="asc",
     )
+
+    if session_id == "all":
+        hands = await crud_hands_player.get_multi_joined(**base_kwargs)
+    else:
+        hands = await crud_hands_player.get_multi_joined(
+            **base_kwargs, session_id__like=session_id
+        )
 
     return hands
