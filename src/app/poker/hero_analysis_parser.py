@@ -661,12 +661,12 @@ class HeroAnalysisParser:
             actions["total_collected"] - actions["total_contributed"]
         )
 
-        # Calculate net profit after rake (only add rake back if Hero collected money)
-        if actions["total_collected"] > 0:
-            # Hero won money, so rake was taken from their winnings
+        # -> this was straight cap fucking bug 1h for this shit fuck u and chatgpt
+        # write ur own code like a man dont let a fucking model write garbage
+        # the fucking comments above only a retarded can write
+        if actions["net_profit"] > 0:
             actions["net_profit_before_rake"] = actions["net_profit"] + rake_amount
         else:
-            # Hero lost, so rake was taken from other players, not from Hero
             actions["net_profit_before_rake"] = actions["net_profit"]
             actions["rake_amount"] = 0
 
