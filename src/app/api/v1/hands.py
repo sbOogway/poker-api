@@ -297,8 +297,8 @@ async def get(
         join_schema_to_select=HandBase,
         player_id__like=player_id,
         limit=None,
-        sort_columns="time",
-        sort_orders="asc",
+        # sort_columns="time",
+        # sort_orders="asc",
     )
 
     if session_id == "all":
