@@ -24,5 +24,5 @@ def clean_names():
         os.system(cmd)
 
 if __name__ == "__main__":
-    # clean_names()
+    clean_names()
     upload()

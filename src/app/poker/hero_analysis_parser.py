@@ -272,7 +272,9 @@ class HeroAnalysisParser:
         )
         return board_cards, flop_cards, turn_card, river_card
 
-    def extract_rake_info(self, hand_text: str, currency: str) -> Tuple[Decimal, Decimal]:
+    def extract_rake_info(
+        self, hand_text: str, currency: str
+    ) -> Tuple[Decimal, Decimal]:
         """Extract total rake amount (including jackpot and other fees) and total pot size from summary"""
         total_rake_amount = Decimal(0.0)
         total_pot_size = Decimal(0.0)
@@ -291,10 +293,7 @@ class HeroAnalysisParser:
             rake_amount = Decimal(m.group(2))
 
             # Sum all fees as total rake
-            total_rake_amount = (
-                rake_amount
-
-            )
+            total_rake_amount = rake_amount
         else:
             # Fallback: Look for individual fee patterns
             fee_patterns = [
@@ -466,7 +465,11 @@ class HeroAnalysisParser:
                     actions["river_actions"] += 1
 
                 # Analyze specific actions
-                if "collected" in line and "from pot" in line:
+                if "collected" in line and (
+                    "from pot" in line
+                    or "from main pot" in line
+                    or "from side pot" in line
+                ):
                     m = re.search(r"collected\s*\(?\$([\d.]+)\)?", line, re.IGNORECASE)
 
                     if currency != "$":
