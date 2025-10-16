@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, field_validator
 
 
 class SessionBase(BaseModel):
@@ -26,6 +26,20 @@ class SessionBase(BaseModel):
     bullets: Optional[int] = Field(
         None, description="Optional number of bullets used; may be null in the DB."
     )
+
+class SessionIdGameStartTime(BaseModel):
+    id: str
+    game: str
+    start_time: datetime = Field(...)
+
+    @classmethod
+    def from_attributes(cls, obj):
+        data = obj.__dict__.copy()
+        data["start_time"] = obj.start_time.isoformat()
+        print("debug from orm")
+
+        return super().parse_obj(data)
+
 
 
 class SessionCreate(SessionBase):
