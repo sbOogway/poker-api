@@ -13,6 +13,8 @@ class Session(Base):
 
     id: Mapped[str] = mapped_column(String, primary_key=True)
 
+    # start_hour: Mapped[str] = mapped_column(DateTime(timezone=True))
+
     cash_in: Mapped[Float] | None = mapped_column(Float)
     cash_out: Mapped[Float] | None = mapped_column(Float)
 

@@ -8,8 +8,9 @@ class SessionBase(BaseModel):
     """Pydantic representation of the SQLAlchemy ``Session`` table."""
 
     id: str = Field(
-        ..., description="Primary key, matches the ``id`` column in the DB."
+        ..., description=" matches the ``id`` column in the DB."
     )
+    # start_hour: datetime = Field(..., description="Hour we begin session, used as primary key")
 
     cash_in: float = Field(None, description="Money in")
     cash_out: float = Field(None, description="Money out")

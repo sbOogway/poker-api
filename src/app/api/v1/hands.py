@@ -67,10 +67,17 @@ async def parse_hands(
     site = parser.extract_site(hands[0])
     currency = parser.extract_currency(hands[0])
     stakes = parser.extract_stakes(hands[0], currency)
-    session_id = parser.extract_session_id(hands[0])
+    # session_id = parser.extract_session_id(hands[0])
     start_time = parser.extract_timestamp(hands[0], timezone_name)
     table_name = parser.extract_table_name(hands[0])
     end_time = parser.extract_timestamp(hands[-1], timezone_name)
+
+
+    # custom session id the one from adm is trash
+    start_hour = start_time.replace(minute=0, second=0, microsecond=0)
+    session_id = hex(abs(hash(start_hour))).zfill(16)
+    # print(session_id)
+
 
     game_name = f"{mode.upper()}_{variant.upper()}_{stakes.upper()}_{site.upper()}"
 
@@ -107,6 +114,7 @@ async def parse_hands(
                 start_time=start_time,
                 end_time=end_time,
                 table_name=table_name,
+                # start_hour=start_time.replace(minute=0, second=0, microsecond=0)
             ),
         )
 
