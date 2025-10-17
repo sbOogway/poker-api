@@ -8,7 +8,7 @@ from typing import Annotated
 from ...schemas.session import SessionIdGameStartTime
 import json
 
-router = APIRouter(tags=["hands"])
+router = APIRouter(tags=["sessions"])
 
 @router.get("/sessions")
 async def get_sessions(
@@ -18,7 +18,9 @@ async def get_sessions(
     sessions = await crud_session.get_multi(
         db,
         schema_to_select=SessionIdGameStartTime,
-        return_as_model=True
+        return_as_model=True,
+        sort_columns=["start_time"],
+        sort_orders="desc"
         )
 
     return list(map(lambda x: json.loads(x.model_dump_json()), sessions["data"]))

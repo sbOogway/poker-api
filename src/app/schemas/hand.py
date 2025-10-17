@@ -40,6 +40,10 @@ class HandReadText(BaseModel):
     session_id: str
     went_to_showdown: bool
 
+class HandRakePot(BaseModel):
+    total_pot_size: float
+    rake_amount: float
+
 class HandCreate(HandBase):
     pass
 
