@@ -1,0 +1,18 @@
+from fastapi import APIRouter, Depends, Request, UploadFile, File, HTTPException, Query
+
+from ...core.db.database import async_get_db
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from ...models.{{model_lower}} import {{model_upper}}
+from ...schemas.{{model_lower}} import {{model_upper}}Base
+from ...crud.crud_{{model_lower}} import crud_{{model_lower}}
+
+from typing import Annotated
+
+router = APIRouter(tags=["{{model_lower}}"])
+
+@router.get("/")
+async def get_{{model_lower}}(
+    db: Annotated[AsyncSession, Depends(async_get_db)],
+):
+    return await crud_{{model_lower}}.get_multi(db, schema_to_select={{model_upper}}Base)

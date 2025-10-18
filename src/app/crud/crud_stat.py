@@ -24,6 +24,6 @@ CRUDStat = FastCRUD[
     StatCreate, StatCreateInternal, StatRead, StatUpdate, StatUpdateInternal, StatDelete
 ]
 
-CRUDStat.select_all_stat = staticmethod(select_all_base)
+CRUDStat.select_all_stat = staticmethod(select_all_stat)
 
 crud_stats = CRUDStat(Stat)
