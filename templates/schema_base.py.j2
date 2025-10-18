@@ -1,0 +1,23 @@
+from pydantic import BaseModel, Field
+
+
+class {{model_upper}}Base(BaseModel):
+    id: str = Field(..., description="{{model_lower}} id")
+
+class {{model_upper}}Create({{model_upper}}Base):
+    pass
+
+class {{model_upper}}CreateInternal({{model_upper}}Base):
+    pass
+
+class {{model_upper}}Read({{model_upper}}Base):
+    pass
+
+class {{model_upper}}Update({{model_upper}}Base):
+    pass
+
+class {{model_upper}}UpdateInternal({{model_upper}}Base):
+    pass
+
+class {{model_upper}}Delete({{model_upper}}Base):
+    pass

@@ -1,0 +1,29 @@
+from fastcrud import FastCRUD
+
+from sqlalchemy import select, or_, and_
+from sqlalchemy.ext.asyncio import AsyncSession
+from ..models.{{model_lower}} import {{model_upper}}
+from ..schemas.{{model_lower}} import (
+    {{model_upper}}Create,
+    {{model_upper}}CreateInternal,
+    {{model_upper}}Read,
+    {{model_upper}}Update,
+    {{model_upper}}UpdateInternal,
+    {{model_upper}}Delete,
+)
+
+
+async def select_all_{{model_lower}}(db: AsyncSession) -> set[str]:
+    stmt = select({{model_upper}}.id)
+    result = await db.execute(stmt)
+    return set(result.scalars().all())
+
+
+
+CRUD{{model_upper}} = FastCRUD[
+    {{model_upper}}Create, {{model_upper}}CreateInternal, {{model_upper}}Read, {{model_upper}}Update, {{model_upper}}UpdateInternal, {{model_upper}}Delete
+]
+
+CRUD{{model_upper}}.select_all_{{model_lower}} = staticmethod(select_all_{{model_lower}})
+
+crud_{{model_lower}}s = CRUD{{model_upper}}({{model_upper}})
