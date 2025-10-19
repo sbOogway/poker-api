@@ -26,4 +26,4 @@ CRUDReport = FastCRUD[
 
 CRUDReport.select_all_report = staticmethod(select_all_report)
 
-crud_reports = CRUDReport(Report)
+crud_report = CRUDReport(Report)

@@ -71,6 +71,15 @@ class HandPlayerBase(BaseModel):
     five_bet: bool = Field(False, description="Five‑bet occurred")
  
 
+class HandPlayerReport(BaseModel):
+    net_profit: float
+    net_profit_before_rake: float
+
+    vpip: bool
+    preflop_raised: bool
+    preflop_called: bool
+    preflop_folded: bool
+
 class HandPlayerCreate(HandPlayerBase):
     pass
 

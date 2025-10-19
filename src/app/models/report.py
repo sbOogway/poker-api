@@ -12,4 +12,5 @@ class Report(Base):
     __tablename__ = "report"
 
     id: Mapped[str] = mapped_column(String, primary_key=True)
+    previous_id: Mapped[str] = mapped_column(String)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default_factory=lambda: datetime.now(UTC))

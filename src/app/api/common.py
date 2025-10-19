@@ -101,3 +101,6 @@ async def analyze_player(
         )
 
     return True
+
+def custom_hash(obj):
+    return hex(abs(hash(obj)))[0:16]

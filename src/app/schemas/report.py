@@ -3,6 +3,7 @@ from pydantic import BaseModel, Field
 
 class ReportBase(BaseModel):
     id: str = Field(..., description="report id")
+    previous_id: str = Field(...)
 
 class ReportCreate(ReportBase):
     pass

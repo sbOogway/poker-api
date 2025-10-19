@@ -44,6 +44,9 @@ class HandRakePot(BaseModel):
     total_pot_size: float
     rake_amount: float
 
+class HandSessionId(BaseModel):
+    session_id: str
+
 class HandCreate(HandBase):
     pass
 

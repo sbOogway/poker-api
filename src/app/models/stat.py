@@ -18,6 +18,6 @@ class Stat(Base):
 
     net_profit: Mapped[float] = mapped_column(Float, default=0.0) 
     rake_paid: Mapped[float] = mapped_column(Float, default=0.0) 
-    vpip: Mapped[float] = mapped_column(Float, default=0.0) 
-    pfr: Mapped[float] = mapped_column(Float, default=0.0) 
-    pfc: Mapped[float] = mapped_column(Float, default=0.0) 
+    vpip: Mapped[int] = mapped_column(Integer, default=0) 
+    pfr: Mapped[int] = mapped_column(Integer, default=0) 
+    pfc: Mapped[int] = mapped_column(Integer, default=0) 

@@ -75,7 +75,7 @@ async def parse_hands(
 
     # custom session id the one from adm is trash
     start_hour = start_time.replace(minute=0, second=0, microsecond=0)
-    session_id = hex(abs(hash(start_hour))).zfill(16)
+    session_id = common.custom_hash(start_hour)
     # print(session_id)
 
     game_name = f"{mode.upper()}_{variant.upper()}_{stakes.upper()}_{site.upper()}"

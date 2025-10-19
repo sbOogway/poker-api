@@ -15,4 +15,4 @@ router = APIRouter(tags=["stat"])
 async def get_stat(
     db: Annotated[AsyncSession, Depends(async_get_db)],
 ):
-    return await crud_stat.get_multi(db, schema_to_select=StatBase)
+    return await crud_stat.get_multi(db)
