@@ -16,7 +16,7 @@ from ..core.db.database import async_get_db
 from ..crud.crud_hand import crud_hands
 from ..crud.crud_hand_player import crud_hands_player
 
-from ..poker.hero_analysis_parser import HeroAnalysisParser, HeroData
+from ..poker.parser import HeroAnalysisParser, HeroData
 
 parser = HeroAnalysisParser()
 async def analyze_player(

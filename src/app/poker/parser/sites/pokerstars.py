@@ -1,110 +1,23 @@
-import os
-import glob
-import re
-
-# import pandas as pd
-import logging
-from typing import Tuple, List, Optional, Dict, Any
-from dataclasses import dataclass, field
+from ..parser import Parser, re
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
-import tzlocal
-from pprint import pprint, pformat
-import traceback
 from decimal import Decimal
+import traceback
+from ..hero_data import HeroData
 
-@dataclass
-class HeroData:
-    """Streamlined Hero-specific data for analysis"""
-
-    hand_id: str
-    # timestamp: datetime
-    site: str
-    stakes: str
-    table_name: str
-    position: str
-    hole_cards: List[str]
-    hand_text: str
-
-    players: List[str]
-
-    # Key analysis metrics
-    went_to_showdown: bool = False
-    won_at_showdown: bool = False  # W$SD - Won at Showdown (boolean)
-    won_when_saw_flop: bool = False
-    saw_flop: bool = False
-
-    # Financial data
-    total_contributed: Decimal = Decimal(0.0)
-    total_collected: Decimal = Decimal(0.0)
-    net_profit: Decimal = Decimal(0.0)
-
-    # Rake analysis
-    rake_amount: Decimal = Decimal(0.0)
-    net_profit_before_rake: Decimal = Decimal(0.0)
-    net_profit_after_rake: Decimal = Decimal(0.0)
-    total_pot_size: Decimal = Decimal(0.0)
-
-    # Hand progression
-    preflop_actions: int = 0
-    flop_actions: int = 0
-    turn_actions: int = 0
-    river_actions: int = 0
-
-    # Board cards
-    flop_cards: List[str] = field(default_factory=list)
-    turn_card: str = ""
-    river_card: str = ""
-
-    # Hand strength indicators
-    preflop_raised: bool = False
-    preflop_called: bool = False
-    preflop_folded: bool = False
-    vpip: bool = False  # Voluntarily Put money In Pot (excluding blinds)
-    cbet_flop: bool = False
-    cbet_turn: bool = False
-    cbet_river: bool = False
-    cbet_flop_opportunity: bool = False  # Hero was aggressor on previous street
-    cbet_turn_opportunity: bool = False
-    cbet_river_opportunity: bool = False
-
-    limped: bool = False
-    called: bool = False
-    serial_caller: bool = False
-
-    single_raised_pot: bool = False
-    three_bet: bool = False
-    four_bet: bool = False
-    five_bet: bool = False
-
-
-class HeroAnalysisParser:
-    """Streamlined parser focused on Hero data analysis only"""
-
-    def __init__(self):
-        self.site_patterns = {
-            "PokerStars": r"PokerStars",
-            "888poker": r"888poker|888 Poker",
-            "ACR": r"Americas Cardroom|ACR",
-            "GGPoker": r"GGPoker|GG Poker",
-            "PartyPoker": r"PartyPoker|Party Poker",
-            "Winamax": r"Winamax",
-            "Unibet": r"Unibet",
-            "Bet365": r"Bet365",
-            "William Hill": r"William Hill",
-        }
+class PokerStars(Parser):
 
     # TODO
     # need to see other game types and extract them accordingly
-    def extract_game_mode(self, hand_text: str) -> str:
-        if "Zoom" in hand_text:
+    def extract_game_mode(self):
+        if "Zoom" in self.hand_text:
             return "Zoom"
         return None
 
     # TODO
     # need to see other game types and extract them accordingly
-    def extract_game_variant(self, hand_text: str) -> str:
-        if "Hold'em No Limit" in hand_text:
+    def extract_game_variant(self) -> str:
+        if "Hold'em No Limit" in self.hand_text:
             return "NLHE"
         return None
 
@@ -112,28 +25,22 @@ class HeroAnalysisParser:
     # rush and cash hand history from bro does not have session id
     # maybe generate an hash based on the time of first hand and other parameters
     # this works for italian sessions with ADM ID
-    def extract_session_id(self, hand_text: str) -> str:
-        m = re.search(r"ADM ID: ([A-Z0-9]{16})", hand_text)
+    def extract_session_id(self) -> str:
+        m = re.search(r"ADM ID: ([A-Z0-9]{16})", self.hand_text)
         return m.group(1)
 
-    def extract_site(self, hand_text: str) -> str:
-        """Extract poker site from hand text"""
-        for site, pattern in self.site_patterns.items():
-            if re.search(pattern, hand_text, re.IGNORECASE):
-                return site
-        return "Unknown"
-
-    def extract_currency(self, hand_text: str) -> str:
-        m = re.search(r"Total pot (.)", hand_text)
+    def extract_currency(self) -> str:
+        m = re.search(r"Total pot (.)", self.hand_text)
         return m.group(1)
 
-    def extract_hand_id(self, hand_text: str) -> str:
-        """Extract hand ID from the header"""
+    def parse_file(self, text):
+        return text.split("\r\n" * 4)[:-1]
+
+    def extract_hand_id(self, hand_text):
         m = re.search(r"Hand #([A-Z0-9]+)", hand_text)
         return m.group(1) if m else ""
 
-    def extract_timestamp(self, hand_text: str, timezone_name: str) -> datetime:
-        """Extract timestamp from the header"""
+    def extract_timestamp(self, hand_text, timezone_name):
         m = re.search(r"(\d{4}/\d{2}/\d{2} (?:\d{1}|\d{2}):\d{2}:\d{2})", hand_text)
         if m:
             return (
@@ -143,33 +50,27 @@ class HeroAnalysisParser:
             )
         return datetime.now()
 
-    def extract_table_name(self, hand_text: str) -> str:
-        """Extract table name from the header"""
+    def extract_table_name(self, hand_text):
         m = re.search(r"Table '([^']+)'", hand_text)
         return m.group(1) if m else ""
 
-    def extract_players(self, hand_text: str) -> List[str]:
+    def extract_players(self, hand_text):
         m = re.findall(r"Seat \d: (.*) \(", hand_text.split("***")[0])
         return m
 
-    def extract_stakes(self, hand_text: str, currency: str) -> str:
-        """Extract stakes from the header"""
+    def extract_stakes(self, hand_text, currency):
         if currency == "$":
             m = re.search(r"\((\$[\d\.]+\/\$[\d\.]+)\)", hand_text)
         else:
             m = re.search(
                 r"\((" + currency + r"[\d\.]+\/" + currency + r"[\d\.]+)\)", hand_text
             )
-        # print(hand_text)
         if m:
             return m.group(1)
         else:
-            # pprint(hand_text)
-            # logger.debug("stakes not found")
             return ""
 
-    def extract_hero_position(self, hand_text: str, username: str) -> str:
-        """Extract Hero's position"""
+    def extract_hero_position(self, hand_text, username):
         # Find Hero's seat
         hero_seat = None
         button_seat = 1
@@ -198,9 +99,7 @@ class HeroAnalysisParser:
 
         return "Unknown"
 
-    def extract_hole_cards_showdown(self, hand_text: str, username) -> List[str]:
-        # print("debug extract hole cards showdown 1")
-
+    def extract_hole_cards_showdown(self, hand_text, username):
         if not "*** SHOW DOWN ***" in hand_text:
             return []
 
@@ -208,21 +107,15 @@ class HeroAnalysisParser:
         # print("debug extract hole cards showdown 2")
         return m.group(1).strip().split() if m else []
 
-    def extract_hero_hole_cards(self, hand_text: str, username: str) -> List[str]:
-        """Extract Hero's hole cards"""
+    def extract_hero_hole_cards(self, hand_text, username):
         m = re.search(
             r"Dealt to " + username + r"\s*\[([^\]]+)\]", hand_text, re.IGNORECASE
         )
         if m:
             return m.group(1).strip().split()
-        # pprint(hand_text)
-        # logger.debug("error extracting hero hole cards")
         return []
 
-    def extract_board_cards(
-        self, hand_text: str
-    ) -> Tuple[List[str], List[str], str, str]:
-        """Extract board cards with street separation"""
+    def extract_board_cards(self, hand_text):
         flop_cards = []
         turn_card = ""
         river_card = ""
@@ -253,10 +146,7 @@ class HeroAnalysisParser:
         )
         return board_cards, flop_cards, turn_card, river_card
 
-    def extract_rake_info(
-        self, hand_text: str, currency: str
-    ) -> Tuple[Decimal, Decimal]:
-        """Extract total rake amount (including jackpot and other fees) and total pot size from summary"""
+    def extract_rake_info(self, hand_text, currency):
         total_rake_amount = Decimal(0.0)
         total_pot_size = Decimal(0.0)
 
@@ -313,11 +203,10 @@ class HeroAnalysisParser:
 
         return total_rake_amount, total_pot_size
 
-    def extract_showdown(self, hand_text: str) -> bool:
+    def extract_showdown(self, hand_text):
         return "*** SHOW DOWN ***" in hand_text
 
-    def detect_multi_player_showdown(self, hand_text: str, username: str) -> bool:
-        """Detect if there was a multi-player showdown (2+ players showed cards)"""
+    def detect_multi_player_showdown(self, hand_text, username):
         showdown_players = 0
 
         # Look for "shows" or "showed" patterns for all players
@@ -337,10 +226,7 @@ class HeroAnalysisParser:
 
         return showdown_players >= 2
 
-    def analyze_hero_actions(
-        self, hand_text: str, username: str, currency: str
-    ) -> Dict[str, Any]:
-        """Clean version of analyze_hero_actions without debug output"""
+    def analyze_hero_actions(self, hand_text, username, currency):
         hero_pattern = re.compile(
             username + r": |^(?:" + username + r"\b|Seat\s+\d+:\s*" + username + r"\b)",
             re.IGNORECASE,
@@ -671,6 +557,7 @@ class HeroAnalysisParser:
 
         return actions
 
+    
     def parse_hand(self, hand_text: str, currency: str, username: str) -> HeroData:
         """Parse a single hand and extract Hero-specific data"""
         try:
@@ -756,49 +643,4 @@ class HeroAnalysisParser:
                 players=[],
             )
 
-    def parse_file_new(self, text: str) -> List[str]:
-        # hands = re.split(r"(.* Hand #.*\r\n\r\n\r\n\r\n)", text)
-        # hands = [hand for hand in hands if hand != "\ufeff"]
-        # pprint(hands)
-        return text.split("\r\n" * 4)[:-1]
 
-    # def parse_hand_from_perspective(self, hand_text: str, currency: str, username:str) -> List[HeroData]:
-
-    def parse_file(self, text: str, currency: str, username: str) -> List[HeroData]:
-        """Parse a file containing multiple hands"""
-        try:
-            # TODO FIXME BRUV HOT FIX FOR DEBUG
-            # FIXME
-            # FIXME
-
-            if currency == "$":
-                hands = re.split(r"(?=Poker Hand #)", text)
-            else:
-                hands = re.split(r"(?=PokerStars Zoom Hand #)", text)
-
-            # FIXME
-            # FIXME
-            # FIXME
-
-            results = []
-            # del hands[0]
-
-            hands = [hand for hand in hands if hand != "\ufeff"]
-            # logger.debug("hands dbg\n" + pformat(hands))
-
-            for hand in hands:
-                if hand.strip():
-                    result = self.parse_hand(hand, currency=currency, username=username)
-                    results.append(result)
-            return results
-        except Exception as e:
-            # logger.error(f"Error parsing file: {e}")
-            return []
-
-
-def main():
-    """Main function for testing the parser"""
-
-
-if __name__ == "__main__":
-    main()

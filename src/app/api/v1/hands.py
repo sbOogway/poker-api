@@ -7,7 +7,8 @@ from ...models.hand import Hand
 from ...models.game import Game
 from ...models.player import Player
 
-from ...poker.hero_analysis_parser import HeroAnalysisParser, HeroData
+from ...poker.parser.parser import Parser
+from ...poker.parser.hero_data import HeroData
 
 # from ...crud.crud_hand import crud_hands
 from pprint import pprint
@@ -36,7 +37,7 @@ from typing import List, Set, Annotated
 
 from ...api import common
 
-parser = HeroAnalysisParser()
+parser = Parser()
 
 router = APIRouter(tags=["hands"])
 
@@ -56,7 +57,7 @@ async def parse_hands(
     raw_bytes = await file.read()
     text = raw_bytes.decode("utf-8")  # adjust encoding if needed
 
-    hands = parser.parse_file_new(text)
+    hands = parser.parse_file(text)
 
     players_in_db: Set[str] = await crud_player.select_all_player(db)
     games_in_db: Set[str] = await crud_game.select_all_game(db)
