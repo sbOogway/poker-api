@@ -1,0 +1,880 @@
+#Game No : 66097415
+***** 888.it Hand History for Game 66097415 *****
+€0.01/€0.02 Blinds No Limit Holdem - *** 23 10 2025 11:25:46
+Table Siniscola 6 Max (Real Money)
+Seat 6 is the button
+Total number of players : 5
+Seat 2: Noia94 ( €1.53 )
+Seat 4: Gusgusgus28 ( €0.60 )
+Seat 6: Erbamagika ( €0.40 )
+Seat 7: Bufalofra ( €3.02 )
+Seat 9: pepoz ( €0.40 )
+Bufalofra posts small blind [€0.01]
+pepoz posts big blind [€0.02]
+Gusgusgus28 posts big blind [€0.02]
+** Dealing down cards **
+Dealt to pepoz [ 8c, 4d ]
+Noia94 calls [€0.02]
+Gusgusgus28 raises [€0.06]
+Erbamagika calls [€0.08]
+Bufalofra folds
+pepoz folds
+Noia94 folds
+** Dealing flop ** [ 8h, As, 2d ]
+Gusgusgus28 bets [€0.02]
+Erbamagika folds
+** Summary **
+Gusgusgus28 did not show his hand
+Gusgusgus28 collected [ €0.20 ]
+
+
+
+#Game No : 66097422
+***** 888.it Hand History for Game 66097422 *****
+€0.01/€0.02 Blinds No Limit Holdem - *** 23 10 2025 11:26:20
+Table Siniscola 6 Max (Real Money)
+Seat 7 is the button
+Total number of players : 5
+Seat 2: Noia94 ( €1.51 )
+Seat 4: Gusgusgus28 ( €0.72 )
+Seat 6: Erbamagika ( €0.32 )
+Seat 7: Bufalofra ( €3.01 )
+Seat 9: pepoz ( €0.38 )
+pepoz posts small blind [€0.01]
+Noia94 posts big blind [€0.02]
+** Dealing down cards **
+Dealt to pepoz [ 7s, 4h ]
+Gusgusgus28 folds
+Erbamagika folds
+Bufalofra folds
+pepoz folds
+** Summary **
+Noia94 did not show his hand
+Noia94 collected [ €0.02 ]
+
+
+
+#Game No : 66097425
+***** 888.it Hand History for Game 66097425 *****
+€0.01/€0.02 Blinds No Limit Holdem - *** 23 10 2025 11:26:32
+Table Siniscola 6 Max (Real Money)
+Seat 9 is the button
+Total number of players : 5
+Seat 2: Noia94 ( €1.52 )
+Seat 4: Gusgusgus28 ( €0.72 )
+Seat 6: Erbamagika ( €0.32 )
+Seat 7: Bufalofra ( €3.01 )
+Seat 9: pepoz ( €0.37 )
+Noia94 posts small blind [€0.01]
+Gusgusgus28 posts big blind [€0.02]
+** Dealing down cards **
+Dealt to pepoz [ 3c, 2s ]
+Erbamagika raises [€0.32]
+Bufalofra folds
+pepoz folds
+Noia94 folds
+Gusgusgus28 folds
+** Summary **
+Erbamagika did not show his hand
+Erbamagika collected [ €0.05 ]
+
+
+
+#Game No : 66097430
+***** 888.it Hand History for Game 66097430 *****
+€0.01/€0.02 Blinds No Limit Holdem - *** 23 10 2025 11:26:47
+Table Siniscola 6 Max (Real Money)
+Seat 2 is the button
+Total number of players : 5
+Seat 2: Noia94 ( €1.51 )
+Seat 4: Gusgusgus28 ( €0.70 )
+Seat 6: Erbamagika ( €0.35 )
+Seat 7: Bufalofra ( €3.01 )
+Seat 9: pepoz ( €0.37 )
+Gusgusgus28 posts small blind [€0.01]
+Erbamagika posts big blind [€0.02]
+** Dealing down cards **
+Dealt to pepoz [ Qc, 5s ]
+Bufalofra calls [€0.02]
+pepoz folds
+Noia94 folds
+Gusgusgus28 raises [€0.03]
+Erbamagika calls [€0.02]
+Bufalofra calls [€0.02]
+** Dealing flop ** [ Kd, Jh, 3c ]
+Gusgusgus28 bets [€0.02]
+Erbamagika calls [€0.02]
+Bufalofra folds
+** Dealing turn ** [ 8c ]
+Gusgusgus28 bets [€0.05]
+Erbamagika calls [€0.05]
+** Dealing river ** [ 2s ]
+Gusgusgus28 bets [€0.08]
+Erbamagika calls [€0.08]
+** Summary **
+Gusgusgus28 shows [ Kh, 7d ]
+Erbamagika mucks [ Ah, 3s ]
+Gusgusgus28 collected [ €0.40 ]
+
+
+
+#Game No : 66097858
+***** 888.it Hand History for Game 66097858 *****
+€0.01/€0.02 Blinds No Limit Holdem - *** 23 10 2025 11:47:20
+Table Siniscola 6 Max (Real Money)
+Seat 1 is the button
+Total number of players : 4
+Seat 1: AleFrank95 ( €2.82 )
+Seat 2: Ssg1774 ( €0.38 )
+Seat 4: pepoz ( €2 )
+Seat 7: Bufalofra ( €2.26 )
+Ssg1774 posts small blind [€0.01]
+pepoz posts big blind [€0.02]
+** Dealing down cards **
+Dealt to pepoz [ Qs, Ts ]
+Bufalofra folds
+AleFrank95 calls [€0.02]
+Ssg1774 calls [€0.01]
+pepoz raises [€0.06]
+AleFrank95 calls [€0.06]
+Ssg1774 folds
+** Dealing flop ** [ Kh, 7d, 2h ]
+pepoz bets [€0.09]
+AleFrank95 folds
+** Summary **
+pepoz did not show his hand
+pepoz collected [ €0.17 ]
+
+
+
+#Game No : 66097867
+***** 888.it Hand History for Game 66097867 *****
+€0.01/€0.02 Blinds No Limit Holdem - *** 23 10 2025 11:47:46
+Table Siniscola 6 Max (Real Money)
+Seat 2 is the button
+Total number of players : 4
+Seat 1: AleFrank95 ( €2.74 )
+Seat 2: Ssg1774 ( €0.36 )
+Seat 4: pepoz ( €2.09 )
+Seat 7: Bufalofra ( €2.26 )
+pepoz posts small blind [€0.01]
+Bufalofra posts big blind [€0.02]
+** Dealing down cards **
+Dealt to pepoz [ Jd, Th ]
+AleFrank95 folds
+Ssg1774 calls [€0.02]
+pepoz folds
+Bufalofra checks
+** Dealing flop ** [ As, Kd, Js ]
+Bufalofra checks
+Ssg1774 bets [€0.04]
+Bufalofra calls [€0.04]
+** Dealing turn ** [ 4c ]
+Bufalofra checks
+Ssg1774 checks
+** Dealing river ** [ 2h ]
+Bufalofra checks
+Ssg1774 checks
+** Summary **
+Bufalofra shows [ Td, 4s ]
+Ssg1774 mucks [ Qd, 7s ]
+Bufalofra collected [ €0.12 ]
+
+
+
+#Game No : 66097879
+***** 888.it Hand History for Game 66097879 *****
+€0.01/€0.02 Blinds No Limit Holdem - *** 23 10 2025 11:48:20
+Table Siniscola 6 Max (Real Money)
+Seat 4 is the button
+Total number of players : 3
+Seat 2: Ssg1774 ( €0.30 )
+Seat 4: pepoz ( €2.08 )
+Seat 7: Bufalofra ( €2.32 )
+Bufalofra posts small blind [€0.01]
+Ssg1774 posts big blind [€0.02]
+** Dealing down cards **
+Dealt to pepoz [ Td, 8s ]
+pepoz raises [€0.05]
+Bufalofra folds
+Ssg1774 folds
+** Summary **
+pepoz did not show his hand
+pepoz collected [ €0.05 ]
+
+
+
+#Game No : 66097884
+***** 888.it Hand History for Game 66097884 *****
+€0.01/€0.02 Blinds No Limit Holdem - *** 23 10 2025 11:48:34
+Table Siniscola 6 Max (Real Money)
+Seat 7 is the button
+Total number of players : 3
+Seat 2: Ssg1774 ( €0.28 )
+Seat 4: pepoz ( €2.11 )
+Seat 7: Bufalofra ( €2.31 )
+Ssg1774 posts small blind [€0.01]
+pepoz posts big blind [€0.02]
+** Dealing down cards **
+Dealt to pepoz [ Qh, 8s ]
+Bufalofra folds
+Ssg1774 calls [€0.01]
+pepoz checks
+** Dealing flop ** [ 5d, Th, 9s ]
+Ssg1774 bets [€0.04]
+pepoz calls [€0.04]
+** Dealing turn ** [ 2s ]
+Ssg1774 checks
+pepoz checks
+** Dealing river ** [ 7c ]
+Ssg1774 bets [€0.08]
+pepoz folds
+** Summary **
+Ssg1774 collected [ €0.11 ]
+
+
+
+#Game No : 66097893
+***** 888.it Hand History for Game 66097893 *****
+€0.01/€0.02 Blinds No Limit Holdem - *** 23 10 2025 11:48:57
+Table Siniscola 6 Max (Real Money)
+Seat 2 is the button
+Total number of players : 4
+Seat 2: Ssg1774 ( €0.33 )
+Seat 4: pepoz ( €2.05 )
+Seat 6: Ale1caz ( €0.60 )
+Seat 7: Bufalofra ( €2.31 )
+pepoz posts small blind [€0.01]
+Ale1caz posts big blind [€0.02]
+** Dealing down cards **
+Dealt to pepoz [ Qh, 9s ]
+Bufalofra folds
+Ssg1774 folds
+pepoz raises [€0.04]
+Ale1caz calls [€0.03]
+** Dealing flop ** [ 9c, 5c, 7h ]
+pepoz checks
+Ale1caz checks
+** Dealing turn ** [ 9d ]
+pepoz bets [€0.02]
+Ale1caz calls [€0.02]
+** Dealing river ** [ 6c ]
+pepoz bets [€0.04]
+Ale1caz raises [€0.08]
+pepoz calls [€0.04]
+** Summary **
+Ale1caz shows [ 8h, 3c ]
+pepoz mucks [ Qh, 9s ]
+Ale1caz collected [ €0.28 ]
+
+
+
+#Game No : 66097902
+***** 888.it Hand History for Game 66097902 *****
+€0.01/€0.02 Blinds No Limit Holdem - *** 23 10 2025 11:49:40
+Table Siniscola 6 Max (Real Money)
+Seat 4 is the button
+Total number of players : 4
+Seat 2: Ssg1774 ( €0.33 )
+Seat 4: pepoz ( €1.90 )
+Seat 6: Ale1caz ( €0.73 )
+Seat 7: Bufalofra ( €2.31 )
+Ale1caz posts small blind [€0.01]
+Bufalofra posts big blind [€0.02]
+** Dealing down cards **
+Dealt to pepoz [ 9s, 2d ]
+Ssg1774 folds
+pepoz folds
+Ale1caz calls [€0.01]
+Bufalofra checks
+** Dealing flop ** [ 7c, Ks, Kc ]
+Ale1caz checks
+Bufalofra checks
+** Dealing turn ** [ 7h ]
+Ale1caz checks
+Bufalofra checks
+** Dealing river ** [ Qd ]
+Ale1caz checks
+Bufalofra checks
+** Summary **
+Ale1caz shows [ As, 9d ]
+Bufalofra mucks [ Jc, 8h ]
+Ale1caz collected [ €0.04 ]
+
+
+
+#Game No : 66097911
+***** 888.it Hand History for Game 66097911 *****
+€0.01/€0.02 Blinds No Limit Holdem - *** 23 10 2025 11:50:02
+Table Siniscola 6 Max (Real Money)
+Seat 6 is the button
+Total number of players : 4
+Seat 2: Ssg1774 ( €0.33 )
+Seat 4: pepoz ( €1.90 )
+Seat 6: Ale1caz ( €0.75 )
+Seat 7: Bufalofra ( €2.29 )
+Bufalofra posts small blind [€0.01]
+Ssg1774 posts big blind [€0.02]
+** Dealing down cards **
+Dealt to pepoz [ Td, 4d ]
+pepoz folds
+Ale1caz folds
+Bufalofra calls [€0.01]
+Ssg1774 checks
+** Dealing flop ** [ 9s, Ts, 4h ]
+Bufalofra checks
+Ssg1774 checks
+** Dealing turn ** [ Ac ]
+Bufalofra bets [€0.02]
+Ssg1774 folds
+** Summary **
+Bufalofra did not show his hand
+Bufalofra collected [ €0.04 ]
+
+
+
+#Game No : 66097918
+***** 888.it Hand History for Game 66097918 *****
+€0.01/€0.02 Blinds No Limit Holdem - *** 23 10 2025 11:50:19
+Table Siniscola 6 Max (Real Money)
+Seat 7 is the button
+Total number of players : 4
+Seat 2: Ssg1774 ( €0.31 )
+Seat 4: pepoz ( €1.90 )
+Seat 6: Ale1caz ( €0.75 )
+Seat 7: Bufalofra ( €2.31 )
+Ssg1774 posts small blind [€0.01]
+pepoz posts big blind [€0.02]
+** Dealing down cards **
+Dealt to pepoz [ Qc, 3h ]
+Ale1caz folds
+Bufalofra folds
+Ssg1774 folds
+** Summary **
+pepoz did not show his hand
+pepoz collected [ €0.02 ]
+
+
+
+#Game No : 66097920
+***** 888.it Hand History for Game 66097920 *****
+€0.01/€0.02 Blinds No Limit Holdem - *** 23 10 2025 11:50:27
+Table Siniscola 6 Max (Real Money)
+Seat 2 is the button
+Total number of players : 4
+Seat 2: Ssg1774 ( €0.30 )
+Seat 4: pepoz ( €1.91 )
+Seat 6: Ale1caz ( €0.75 )
+Seat 7: Bufalofra ( €2.31 )
+pepoz posts small blind [€0.01]
+Ale1caz posts big blind [€0.02]
+** Dealing down cards **
+Dealt to pepoz [ Kh, 8c ]
+Bufalofra folds
+Ssg1774 calls [€0.02]
+pepoz folds
+Ale1caz checks
+** Dealing flop ** [ Ks, 7h, 5d ]
+Ale1caz checks
+Ssg1774 bets [€0.02]
+Ale1caz folds
+** Summary **
+Ssg1774 did not show his hand
+Ssg1774 collected [ €0.05 ]
+
+
+
+#Game No : 66097924
+***** 888.it Hand History for Game 66097924 *****
+€0.01/€0.02 Blinds No Limit Holdem - *** 23 10 2025 11:50:41
+Table Siniscola 6 Max (Real Money)
+Seat 4 is the button
+Total number of players : 4
+Seat 2: Ssg1774 ( €0.33 )
+Seat 4: pepoz ( €1.90 )
+Seat 6: Ale1caz ( €0.73 )
+Seat 7: Bufalofra ( €2.31 )
+Ale1caz posts small blind [€0.01]
+Bufalofra posts big blind [€0.02]
+** Dealing down cards **
+Dealt to pepoz [ Kd, 9s ]
+Ssg1774 folds
+pepoz raises [€0.05]
+Ale1caz folds
+Bufalofra calls [€0.03]
+** Dealing flop ** [ 6s, 9c, 5s ]
+Bufalofra checks
+pepoz bets [€0.05]
+Bufalofra calls [€0.05]
+** Dealing turn ** [ Jd ]
+Bufalofra checks
+pepoz checks
+** Dealing river ** [ Qh ]
+Bufalofra checks
+pepoz checks
+** Summary **
+Bufalofra shows [ 3h, 2h ]
+pepoz shows [ Kd, 9s ]
+pepoz collected [ €0.20 ]
+
+
+
+#Game No : 66097935
+***** 888.it Hand History for Game 66097935 *****
+€0.01/€0.02 Blinds No Limit Holdem - *** 23 10 2025 11:51:23
+Table Siniscola 6 Max (Real Money)
+Seat 6 is the button
+Total number of players : 5
+Seat 2: Ssg1774 ( €0.33 )
+Seat 4: pepoz ( €2 )
+Seat 6: Ale1caz ( €0.72 )
+Seat 7: Bufalofra ( €2.21 )
+Seat 9: DoctorF ( €0.61 )
+Bufalofra posts small blind [€0.01]
+DoctorF posts big blind [€0.02]
+** Dealing down cards **
+Dealt to pepoz [ Kh, 6c ]
+Ssg1774 folds
+pepoz folds
+Ale1caz calls [€0.02]
+Bufalofra calls [€0.01]
+DoctorF checks
+** Dealing flop ** [ Qd, 9h, As ]
+Bufalofra checks
+DoctorF checks
+Ale1caz bets [€0.04]
+Bufalofra folds
+DoctorF folds
+** Summary **
+Ale1caz did not show his hand
+Ale1caz collected [ €0.06 ]
+
+
+
+#Game No : 66097938
+***** 888.it Hand History for Game 66097938 *****
+€0.01/€0.02 Blinds No Limit Holdem - *** 23 10 2025 11:51:41
+Table Siniscola 6 Max (Real Money)
+Seat 7 is the button
+Total number of players : 5
+Seat 2: Ssg1774 ( €0.33 )
+Seat 4: pepoz ( €2 )
+Seat 6: Ale1caz ( €0.76 )
+Seat 7: Bufalofra ( €2.19 )
+Seat 9: DoctorF ( €0.59 )
+DoctorF posts small blind [€0.01]
+Ssg1774 posts big blind [€0.02]
+** Dealing down cards **
+Dealt to pepoz [ Ts, 2d ]
+pepoz folds
+Ale1caz folds
+Bufalofra raises [€0.04]
+DoctorF calls [€0.03]
+Ssg1774 calls [€0.02]
+** Dealing flop ** [ 6h, Jc, Th ]
+DoctorF bets [€0.06]
+Ssg1774 raises [€0.29]
+Bufalofra folds
+DoctorF folds
+** Summary **
+Ssg1774 did not show his hand
+Ssg1774 collected [ €0.23 ]
+
+
+
+#Game No : 66097943
+***** 888.it Hand History for Game 66097943 *****
+€0.01/€0.02 Blinds No Limit Holdem - *** 23 10 2025 11:52:06
+Table Siniscola 6 Max (Real Money)
+Seat 9 is the button
+Total number of players : 5
+Seat 2: Ssg1774 ( €0.46 )
+Seat 4: pepoz ( €2 )
+Seat 6: Ale1caz ( €0.76 )
+Seat 7: Bufalofra ( €2.15 )
+Seat 9: DoctorF ( €0.49 )
+Ssg1774 posts small blind [€0.01]
+pepoz posts big blind [€0.02]
+** Dealing down cards **
+Dealt to pepoz [ Qc, Jd ]
+Ale1caz calls [€0.02]
+Bufalofra folds
+DoctorF raises [€0.06]
+Ssg1774 folds
+pepoz folds
+Ale1caz calls [€0.04]
+** Dealing flop ** [ Jh, As, Kd ]
+Ale1caz checks
+DoctorF bets [€0.07]
+Ale1caz raises [€0.44]
+DoctorF calls [€0.36]
+** Dealing turn ** [ 9c ]
+** Dealing river ** [ 7d ]
+** Summary **
+Ale1caz shows [ Ac, 4s ]
+DoctorF shows [ Qd, Qs ]
+Ale1caz collected [ €0.95 ]
+
+
+
+#Game No : 66097954
+***** 888.it Hand History for Game 66097954 *****
+€0.01/€0.02 Blinds No Limit Holdem - *** 23 10 2025 11:52:47
+Table Siniscola 6 Max (Real Money)
+Seat 2 is the button
+Total number of players : 4
+Seat 2: Ssg1774 ( €0.45 )
+Seat 4: pepoz ( €1.98 )
+Seat 6: Ale1caz ( €1.22 )
+Seat 7: Bufalofra ( €2.15 )
+pepoz posts small blind [€0.01]
+Ale1caz posts big blind [€0.02]
+** Dealing down cards **
+Dealt to pepoz [ Kc, 6h ]
+Bufalofra folds
+Ssg1774 calls [€0.02]
+pepoz folds
+Ale1caz checks
+** Dealing flop ** [ 8d, Qc, Jh ]
+Ale1caz checks
+Ssg1774 checks
+** Dealing turn ** [ Ac ]
+Ale1caz checks
+Ssg1774 bets [€0.04]
+Ale1caz folds
+** Summary **
+Ssg1774 collected [ €0.05 ]
+
+
+
+#Game No : 66097958
+***** 888.it Hand History for Game 66097958 *****
+€0.01/€0.02 Blinds No Limit Holdem - *** 23 10 2025 11:53:02
+Table Siniscola 6 Max (Real Money)
+Seat 4 is the button
+Total number of players : 4
+Seat 2: Ssg1774 ( €0.48 )
+Seat 4: pepoz ( €1.97 )
+Seat 6: Ale1caz ( €1.20 )
+Seat 7: Bufalofra ( €2.15 )
+Ale1caz posts small blind [€0.01]
+Bufalofra posts big blind [€0.02]
+** Dealing down cards **
+Dealt to pepoz [ Qh, 3d ]
+Ssg1774 calls [€0.02]
+pepoz folds
+Ale1caz calls [€0.01]
+Bufalofra raises [€0.04]
+Ssg1774 folds
+Ale1caz calls [€0.04]
+** Dealing flop ** [ 8c, 6s, 6d ]
+Ale1caz checks
+Bufalofra bets [€0.06]
+Ale1caz folds
+** Summary **
+Bufalofra collected [ €0.13 ]
+
+
+
+#Game No : 66097961
+***** 888.it Hand History for Game 66097961 *****
+€0.01/€0.02 Blinds No Limit Holdem - *** 23 10 2025 11:53:20
+Table Siniscola 6 Max (Real Money)
+Seat 6 is the button
+Total number of players : 4
+Seat 2: Ssg1774 ( €0.46 )
+Seat 4: pepoz ( €1.97 )
+Seat 6: Ale1caz ( €1.14 )
+Seat 7: Bufalofra ( €2.22 )
+Bufalofra posts small blind [€0.01]
+Ssg1774 posts big blind [€0.02]
+** Dealing down cards **
+Dealt to pepoz [ Td, 4h ]
+pepoz folds
+Ale1caz calls [€0.02]
+Bufalofra calls [€0.01]
+Ssg1774 checks
+** Dealing flop ** [ Jh, 6h, 8d ]
+Bufalofra checks
+Ssg1774 checks
+Ale1caz checks
+** Dealing turn ** [ 9s ]
+Bufalofra checks
+Ssg1774 checks
+Ale1caz checks
+** Dealing river ** [ Th ]
+Bufalofra bets [€0.02]
+Ssg1774 calls [€0.02]
+Ale1caz folds
+** Summary **
+Bufalofra shows [ Qd, 7d ]
+Ssg1774 mucks [ Tc, 5s ]
+Bufalofra collected [ €0.09 ]
+
+
+
+#Game No : 66097967
+***** 888.it Hand History for Game 66097967 *****
+€0.01/€0.02 Blinds No Limit Holdem - *** 23 10 2025 11:53:50
+Table Siniscola 6 Max (Real Money)
+Seat 7 is the button
+Total number of players : 4
+Seat 2: Ssg1774 ( €0.42 )
+Seat 4: pepoz ( €1.97 )
+Seat 6: Ale1caz ( €1.12 )
+Seat 7: Bufalofra ( €2.27 )
+Ssg1774 posts small blind [€0.01]
+pepoz posts big blind [€0.02]
+** Dealing down cards **
+Dealt to pepoz [ Jc, 2h ]
+Ale1caz calls [€0.02]
+Bufalofra folds
+Ssg1774 calls [€0.01]
+pepoz checks
+** Dealing flop ** [ Th, 8h, Ad ]
+Ssg1774 bets [€0.02]
+pepoz folds
+Ale1caz calls [€0.02]
+** Dealing turn ** [ Jh ]
+Ssg1774 checks
+Ale1caz bets [€0.02]
+Ssg1774 calls [€0.02]
+** Dealing river ** [ 9s ]
+Ssg1774 checks
+Ale1caz checks
+** Summary **
+Ssg1774 shows [ Ts, 2s ]
+Ale1caz shows [ As, 4c ]
+Ale1caz collected [ €0.13 ]
+
+
+
+#Game No : 66097979
+***** 888.it Hand History for Game 66097979 *****
+€0.01/€0.02 Blinds No Limit Holdem - *** 23 10 2025 11:54:31
+Table Siniscola 6 Max (Real Money)
+Seat 2 is the button
+Total number of players : 4
+Seat 2: Ssg1774 ( €0.36 )
+Seat 4: pepoz ( €1.95 )
+Seat 6: Ale1caz ( €1.19 )
+Seat 7: Bufalofra ( €2.27 )
+pepoz posts small blind [€0.01]
+Ale1caz posts big blind [€0.02]
+** Dealing down cards **
+Dealt to pepoz [ Qc, 9c ]
+Bufalofra raises [€0.04]
+Ssg1774 folds
+pepoz calls [€0.03]
+Ale1caz calls [€0.02]
+** Dealing flop ** [ 9s, Ks, 8h ]
+pepoz checks
+Ale1caz checks
+Bufalofra bets [€0.06]
+pepoz folds
+Ale1caz folds
+** Summary **
+Bufalofra did not show his hand
+Bufalofra collected [ €0.11 ]
+
+
+
+#Game No : 66097985
+***** 888.it Hand History for Game 66097985 *****
+€0.01/€0.02 Blinds No Limit Holdem - *** 23 10 2025 11:55:05
+Table Siniscola 6 Max (Real Money)
+Seat 4 is the button
+Total number of players : 4
+Seat 2: Ssg1774 ( €0.36 )
+Seat 4: pepoz ( €1.91 )
+Seat 6: Ale1caz ( €1.15 )
+Seat 7: Bufalofra ( €2.34 )
+Ale1caz posts small blind [€0.01]
+Bufalofra posts big blind [€0.02]
+** Dealing down cards **
+Dealt to pepoz [ Ac, Qs ]
+Ssg1774 folds
+pepoz raises [€0.05]
+Ale1caz calls [€0.04]
+Bufalofra folds
+** Dealing flop ** [ 9d, Ah, 8h ]
+Ale1caz checks
+pepoz bets [€0.06]
+Ale1caz calls [€0.06]
+** Dealing turn ** [ 2d ]
+Ale1caz checks
+pepoz bets [€0.07]
+Ale1caz calls [€0.07]
+** Dealing river ** [ As ]
+Ale1caz checks
+pepoz bets [€0.17]
+Ale1caz calls [€0.17]
+** Summary **
+pepoz shows [ Ac, Qs ]
+Ale1caz mucks [ 9c, 4c ]
+pepoz collected [ €0.68 ]
+
+
+
+#Game No : 66097991
+***** 888.it Hand History for Game 66097991 *****
+€0.01/€0.02 Blinds No Limit Holdem - *** 23 10 2025 11:55:54
+Table Siniscola 6 Max (Real Money)
+Seat 6 is the button
+Total number of players : 4
+Seat 2: Ssg1774 ( €0.36 )
+Seat 4: pepoz ( €2.24 )
+Seat 6: Ale1caz ( €0.80 )
+Seat 7: Bufalofra ( €2.32 )
+Bufalofra posts small blind [€0.01]
+Ssg1774 posts big blind [€0.02]
+** Dealing down cards **
+Dealt to pepoz [ Td, 9s ]
+pepoz folds
+Ale1caz calls [€0.02]
+Bufalofra folds
+Ssg1774 checks
+** Dealing flop ** [ 3h, 3c, 8s ]
+Ssg1774 checks
+Ale1caz checks
+** Dealing turn ** [ Kd ]
+Ssg1774 checks
+Ale1caz checks
+** Dealing river ** [ 4d ]
+Ssg1774 bets [€0.02]
+Ale1caz calls [€0.02]
+** Summary **
+Ssg1774 shows [ Ah, 4s ]
+Ale1caz shows [ Ad, 4h ]
+Ale1caz collected [ €0.04 ]
+Ssg1774 collected [ €0.05 ]
+
+
+
+#Game No : 66098001
+***** 888.it Hand History for Game 66098001 *****
+€0.01/€0.02 Blinds No Limit Holdem - *** 23 10 2025 11:56:16
+Table Siniscola 6 Max (Real Money)
+Seat 7 is the button
+Total number of players : 4
+Seat 2: Ssg1774 ( €0.37 )
+Seat 4: pepoz ( €2.24 )
+Seat 6: Ale1caz ( €0.80 )
+Seat 7: Bufalofra ( €2.31 )
+Ssg1774 posts small blind [€0.01]
+pepoz posts big blind [€0.02]
+** Dealing down cards **
+Dealt to pepoz [ Kc, 3d ]
+Ale1caz folds
+Bufalofra calls [€0.02]
+Ssg1774 calls [€0.01]
+pepoz checks
+** Dealing flop ** [ Jc, Qc, Kd ]
+Ssg1774 bets [€0.02]
+pepoz calls [€0.02]
+Bufalofra calls [€0.02]
+** Dealing turn ** [ Jd ]
+Ssg1774 bets [€0.02]
+pepoz calls [€0.02]
+Bufalofra raises [€0.08]
+Ssg1774 raises [€0.31]
+pepoz folds
+Bufalofra calls [€0.25]
+** Dealing river ** [ 7h ]
+** Summary **
+Ssg1774 shows [ Js, 2d ]
+Bufalofra shows [ Jh, 6h ]
+Bufalofra collected [ €0.38 ]
+Ssg1774 collected [ €0.38 ]
+
+
+
+#Game No : 66098012
+***** 888.it Hand History for Game 66098012 *****
+€0.01/€0.02 Blinds No Limit Holdem - *** 23 10 2025 11:57:06
+Table Siniscola 6 Max (Real Money)
+Seat 2 is the button
+Total number of players : 4
+Seat 2: Ssg1774 ( €0.38 )
+Seat 4: pepoz ( €2.18 )
+Seat 6: Ale1caz ( €0.80 )
+Seat 7: Bufalofra ( €2.32 )
+pepoz posts small blind [€0.01]
+Ale1caz posts big blind [€0.02]
+** Dealing down cards **
+Dealt to pepoz [ 9d, 5h ]
+Bufalofra calls [€0.02]
+Ssg1774 folds
+pepoz folds
+Ale1caz checks
+** Dealing flop ** [ Kh, As, Td ]
+Ale1caz checks
+Bufalofra bets [€0.02]
+Ale1caz folds
+** Summary **
+Bufalofra did not show his hand
+Bufalofra collected [ €0.05 ]
+
+
+
+#Game No : 66098020
+***** 888.it Hand History for Game 66098020 *****
+€0.01/€0.02 Blinds No Limit Holdem - *** 23 10 2025 11:57:18
+Table Siniscola 6 Max (Real Money)
+Seat 4 is the button
+Total number of players : 4
+Seat 2: Ssg1774 ( €0.38 )
+Seat 4: pepoz ( €2.17 )
+Seat 6: Ale1caz ( €0.78 )
+Seat 7: Bufalofra ( €2.35 )
+Ale1caz posts small blind [€0.01]
+Bufalofra posts big blind [€0.02]
+** Dealing down cards **
+Dealt to pepoz [ 4c, 4h ]
+Ssg1774 calls [€0.02]
+pepoz raises [€0.08]
+Ale1caz calls [€0.07]
+Bufalofra calls [€0.06]
+Ssg1774 folds
+** Dealing flop ** [ 8s, 6d, Ad ]
+Ale1caz checks
+Bufalofra checks
+pepoz bets [€0.13]
+Ale1caz folds
+Bufalofra folds
+** Summary **
+pepoz did not show his hand
+pepoz collected [ €0.25 ]
+
+
+
+#Game No : 66098030
+***** 888.it Hand History for Game 66098030 *****
+€0.01/€0.02 Blinds No Limit Holdem - *** 23 10 2025 11:57:55
+Table Siniscola 6 Max (Real Money)
+Seat 6 is the button
+Total number of players : 4
+Seat 2: Ssg1774 ( €0.36 )
+Seat 4: pepoz ( €2.34 )
+Seat 6: Ale1caz ( €0.70 )
+Seat 7: Bufalofra ( €2.27 )
+Bufalofra posts small blind [€0.01]
+Ssg1774 posts big blind [€0.02]
+** Dealing down cards **
+Dealt to pepoz [ Ad, Kd ]
+pepoz raises [€0.05]
+Ale1caz folds
+Bufalofra calls [€0.04]
+Ssg1774 folds
+** Dealing flop ** [ 5c, 2d, Jc ]
+Bufalofra bets [€0.06]
+pepoz calls [€0.06]
+** Dealing turn ** [ 7h ]
+Bufalofra bets [€0.12]
+pepoz folds
+** Summary **
+Bufalofra did not show his hand
+Bufalofra collected [ €0.23 ]
+
+
+
