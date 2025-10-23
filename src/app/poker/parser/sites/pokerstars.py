@@ -9,15 +9,15 @@ class PokerStars(Parser):
 
     # TODO
     # need to see other game types and extract them accordingly
-    def extract_game_mode(self):
-        if "Zoom" in self.hand_text:
+    def extract_game_mode(self, hand_text):
+        if "Zoom" in hand_text:
             return "Zoom"
         return None
 
     # TODO
     # need to see other game types and extract them accordingly
-    def extract_game_variant(self) -> str:
-        if "Hold'em No Limit" in self.hand_text:
+    def extract_game_variant(self, hand_text) -> str:
+        if "Hold'em No Limit" in hand_text:
             return "NLHE"
         return None
 
@@ -25,16 +25,16 @@ class PokerStars(Parser):
     # rush and cash hand history from bro does not have session id
     # maybe generate an hash based on the time of first hand and other parameters
     # this works for italian sessions with ADM ID
-    def extract_session_id(self) -> str:
-        m = re.search(r"ADM ID: ([A-Z0-9]{16})", self.hand_text)
+    def extract_session_id(self, hand_text) -> str:
+        m = re.search(r"ADM ID: ([A-Z0-9]{16})", hand_text)
         return m.group(1)
 
-    def extract_currency(self) -> str:
-        m = re.search(r"Total pot (.)", self.hand_text)
+    def extract_currency(self, hand_text) -> str:
+        m = re.search(r"Total pot (.)", hand_text)
         return m.group(1)
 
     def parse_file(self, text):
-        return text.split("\r\n" * 4)[:-1]
+        return text.split("\n" * 4)[:-1]
 
     def extract_hand_id(self, hand_text):
         m = re.search(r"Hand #([A-Z0-9]+)", hand_text)
@@ -71,33 +71,58 @@ class PokerStars(Parser):
             return ""
 
     def extract_hero_position(self, hand_text, username):
-        # Find Hero's seat
-        hero_seat = None
-        button_seat = 1
+        m = re.search(r"Seat #(\d) is the button", hand_text)
+        button_seat = int(m.group(1))
 
-        # Extract button seat
-        m = re.search(r"Seat #(\d+) is the button", hand_text, re.IGNORECASE)
-        if m:
-            button_seat = int(m.group(1))
+        p = r"Seat (\d): (\w+) "
+        matches = re.finditer(p, hand_text.split("*** HOLE CARDS ***")[0])
 
-        # Find Hero's seat
-        m = re.search(r"Seat (\d+): " + username, hand_text, re.IGNORECASE)
-        if m:
-            hero_seat = int(m.group(1))
+        players = []
+        result = {}
 
-        if hero_seat:
-            positions = [
-                "Button",
-                "Small Blind",
-                "Big Blind",
-                "UTG",
-                "Hijack",
-                "Cutoff",
-            ]
-            index = (hero_seat - button_seat) % len(positions)
-            return positions[index]
+        positions = [
+            "Big Blind",
+            "Small Blind",
+            "Button",
+            "Cutoff",
+            "Hijack",
+            "Lojack",
+            "Middle Position",
+            "UTG+1",
+            "UTG",
+        ]
 
-        return "Unknown"
+        for index, match in enumerate(matches, start=1):
+            players.append(
+                {
+                    "id": match.group(2),
+                    "position": None,
+                    "seat": int(match.group(1)),
+                    "index": index,
+                }
+            )
+
+        for _, player in enumerate(players[:]):
+            if player["seat"] != button_seat:
+                players.remove(player)
+                players.append(player)
+                continue
+
+            btn = players.pop(0)
+            sb = players.pop(0)
+            players.insert(1, sb)
+            players.insert(2, btn)
+            players[3:] = reversed(players[3:])
+            break
+
+        for idx, player in enumerate(players):
+
+            players[idx] = player | dict(position=positions[idx])
+            result[player["id"]] = positions[idx]
+        
+        print(result)
+
+        return result[username]
 
     def extract_hole_cards_showdown(self, hand_text, username):
         if not "*** SHOW DOWN ***" in hand_text:

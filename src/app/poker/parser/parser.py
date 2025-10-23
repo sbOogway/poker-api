@@ -5,7 +5,7 @@ import re
 # import pandas as pd
 import logging
 from typing import Tuple, List, Optional, Dict, Any, Callable
-from hero_data import HeroData
+from .hero_data import HeroData
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 import tzlocal
@@ -13,7 +13,7 @@ from pprint import pprint, pformat
 import traceback
 from decimal import Decimal
 from functools import wraps
-from abc import ABC, abstractmethod, classmethod
+from abc import ABC, abstractmethod
 
 
 # site_mapper: dict[str, Callable] = {
@@ -36,8 +36,8 @@ from abc import ABC, abstractmethod, classmethod
 class Parser(ABC):
     """Streamlined parser focused on Hero data analysis only"""
 
-    def __init__(self, hand_text: str):
-        self.hand_text = hand_text
+    def __init__(self):
+        # self.hand_text = hand_text
         self.site_patterns = {
             "PokerStars": r"PokerStars",
             "888poker": r"888poker|888 Poker|888.it",
@@ -51,19 +51,19 @@ class Parser(ABC):
         }
 
     @abstractmethod
-    def extract_game_mode(self) -> str:
+    def extract_game_mode(self, hand_text) -> str:
         """extract game mode"""
 
     @abstractmethod
-    def extract_game_variant(self) -> str:
+    def extract_game_variant(self, hand_text) -> str:
         """extract game variant"""
 
     @abstractmethod
-    def extract_session_id(self) -> str:
+    def extract_session_id(self, hand_text) -> str:
         """extract session id"""
 
     @abstractmethod
-    def extract_currency(self) -> str:
+    def extract_currency(self, hand_text) -> str:
         """extract game currency"""
 
     def extract_site(self, hand_text: str) -> str:
