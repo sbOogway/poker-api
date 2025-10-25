@@ -5,18 +5,29 @@ from decimal import Decimal
 import traceback
 from ..hero_data import HeroData
 
+
+
 class PokerStars(Parser):
+    site: str = "PokerStars"
+    pattern: str = r"PokerStars"
+
+    @staticmethod
+    def register():
+        Parser.register_mapper(Parser, PokerStars.site, PokerStars)
+
 
     # TODO
     # need to see other game types and extract them accordingly
-    def extract_game_mode(self, hand_text):
+    @staticmethod
+    def extract_game_mode(hand_text):
         if "Zoom" in hand_text:
-            return "Zoom"
+            return "ZOOM"
         return None
 
     # TODO
     # need to see other game types and extract them accordingly
-    def extract_game_variant(self, hand_text) -> str:
+    @staticmethod
+    def extract_game_variant(hand_text) -> str:
         if "Hold'em No Limit" in hand_text:
             return "NLHE"
         return None
@@ -25,22 +36,29 @@ class PokerStars(Parser):
     # rush and cash hand history from bro does not have session id
     # maybe generate an hash based on the time of first hand and other parameters
     # this works for italian sessions with ADM ID
-    def extract_session_id(self, hand_text) -> str:
+    @staticmethod
+    def extract_session_id(hand_text) -> str:
         m = re.search(r"ADM ID: ([A-Z0-9]{16})", hand_text)
         return m.group(1)
 
-    def extract_currency(self, hand_text) -> str:
+    @staticmethod
+    def extract_currency(hand_text) -> str:
         m = re.search(r"Total pot (.)", hand_text)
         return m.group(1)
 
-    def parse_file(self, text):
+    @staticmethod
+    def parse_file(text: str):
+        if "\r\n" in text:
+            return text.split("\r\n" * 4)[:-1]
         return text.split("\n" * 4)[:-1]
 
-    def extract_hand_id(self, hand_text):
+    @staticmethod
+    def extract_hand_id(hand_text):
         m = re.search(r"Hand #([A-Z0-9]+)", hand_text)
         return m.group(1) if m else ""
 
-    def extract_timestamp(self, hand_text, timezone_name):
+    @staticmethod
+    def extract_timestamp(hand_text, timezone_name):
         m = re.search(r"(\d{4}/\d{2}/\d{2} (?:\d{1}|\d{2}):\d{2}:\d{2})", hand_text)
         if m:
             return (
@@ -50,15 +68,18 @@ class PokerStars(Parser):
             )
         return datetime.now()
 
-    def extract_table_name(self, hand_text):
+    @staticmethod
+    def extract_table_name(hand_text):
         m = re.search(r"Table '([^']+)'", hand_text)
         return m.group(1) if m else ""
 
-    def extract_players(self, hand_text):
+    @staticmethod
+    def extract_players(hand_text):
         m = re.findall(r"Seat \d: (.*) \(", hand_text.split("***")[0])
         return m
 
-    def extract_stakes(self, hand_text, currency):
+    @staticmethod
+    def extract_stakes(hand_text, currency):
         if currency == "$":
             m = re.search(r"\((\$[\d\.]+\/\$[\d\.]+)\)", hand_text)
         else:
@@ -70,7 +91,8 @@ class PokerStars(Parser):
         else:
             return ""
 
-    def extract_hero_position(self, hand_text, username):
+    @staticmethod
+    def extract_hero_position(hand_text, username):
         m = re.search(r"Seat #(\d) is the button", hand_text)
         button_seat = int(m.group(1))
 
@@ -120,11 +142,12 @@ class PokerStars(Parser):
             players[idx] = player | dict(position=positions[idx])
             result[player["id"]] = positions[idx]
         
-        print(result)
+        # print(result)
 
         return result[username]
 
-    def extract_hole_cards_showdown(self, hand_text, username):
+    @staticmethod
+    def extract_hole_cards_showdown(hand_text, username):
         if not "*** SHOW DOWN ***" in hand_text:
             return []
 
@@ -132,7 +155,8 @@ class PokerStars(Parser):
         # print("debug extract hole cards showdown 2")
         return m.group(1).strip().split() if m else []
 
-    def extract_hero_hole_cards(self, hand_text, username):
+    @staticmethod
+    def extract_hero_hole_cards(hand_text, username):
         m = re.search(
             r"Dealt to " + username + r"\s*\[([^\]]+)\]", hand_text, re.IGNORECASE
         )
@@ -140,7 +164,8 @@ class PokerStars(Parser):
             return m.group(1).strip().split()
         return []
 
-    def extract_board_cards(self, hand_text):
+    @staticmethod
+    def extract_board_cards(hand_text):
         flop_cards = []
         turn_card = ""
         river_card = ""
@@ -164,14 +189,10 @@ class PokerStars(Parser):
         if m:
             river_card = m.group(1).strip()
 
-        board_cards = (
-            flop_cards
-            + ([turn_card] if turn_card else [])
-            + ([river_card] if river_card else [])
-        )
-        return board_cards, flop_cards, turn_card, river_card
+        return  flop_cards, turn_card, river_card
 
-    def extract_rake_info(self, hand_text, currency):
+    @staticmethod
+    def extract_rake_info(hand_text, currency):
         total_rake_amount = Decimal(0.0)
         total_pot_size = Decimal(0.0)
 
@@ -226,12 +247,14 @@ class PokerStars(Parser):
 
         # logger.debug(f"rake and pot size debug {total_rake_amount} {total_pot_size}")
 
-        return total_rake_amount, total_pot_size
+        return total_rake_amount, total_pot_size, None
 
-    def extract_showdown(self, hand_text):
+    @staticmethod
+    def extract_showdown(hand_text):
         return "*** SHOW DOWN ***" in hand_text
 
-    def detect_multi_player_showdown(self, hand_text, username):
+    @staticmethod
+    def detect_multi_player_showdown(hand_text, username):
         showdown_players = 0
 
         # Look for "shows" or "showed" patterns for all players
@@ -251,7 +274,8 @@ class PokerStars(Parser):
 
         return showdown_players >= 2
 
-    def analyze_hero_actions(self, hand_text, username, currency):
+    @staticmethod
+    def analyze_hero_actions(hand_text, username, currency):
         hero_pattern = re.compile(
             username + r": |^(?:" + username + r"\b|Seat\s+\d+:\s*" + username + r"\b)",
             re.IGNORECASE,
@@ -542,7 +566,7 @@ class PokerStars(Parser):
             )
 
         # Extract rake information
-        rake_amount, total_pot_size = self.extract_rake_info(
+        rake_amount, total_pot_size, _ = PokerStars.extract_rake_info(
             hand_text, currency=currency
         )
         actions["rake_amount"] = rake_amount
@@ -567,7 +591,7 @@ class PokerStars(Parser):
 
         # Check for multi-player showdown (W$SD only counts when 2+ players show cards)
         if actions["went_to_showdown"]:
-            multi_player_showdown = self.detect_multi_player_showdown(
+            multi_player_showdown = PokerStars.detect_multi_player_showdown(
                 hand_text, username=username
             )
             # W$SD only counts if there was a multi-player showdown AND Hero won money
@@ -583,26 +607,27 @@ class PokerStars(Parser):
         return actions
 
     
-    def parse_hand(self, hand_text: str, currency: str, username: str) -> HeroData:
+    @staticmethod
+    def parse_hand(hand_text: str, currency: str, username: str) -> HeroData:
         """Parse a single hand and extract Hero-specific data"""
         try:
             # Extract basic info
-            hand_id = self.extract_hand_id(hand_text)
-            # timestamp = self.extract_timestamp(hand_text, timezone_name)
-            site = self.extract_site(hand_text)
-            table_name = self.extract_table_name(hand_text)
-            stakes = self.extract_stakes(hand_text, currency)
-            position = self.extract_hero_position(hand_text, username)
-            hole_cards = self.extract_hero_hole_cards(hand_text, username)
-            players = self.extract_players(hand_text)
+            hand_id = PokerStars.extract_hand_id(hand_text)
+            # timestamp = PokerStars.extract_timestamp(hand_text, timezone_name)
+            site = PokerStars.site # PokerStars.extract_site(hand_text)
+            table_name = PokerStars.extract_table_name(hand_text)
+            stakes = PokerStars.extract_stakes(hand_text, currency)
+            position = PokerStars.extract_hero_position(hand_text, username)
+            hole_cards = PokerStars.extract_hero_hole_cards(hand_text, username)
+            players = PokerStars.extract_players(hand_text)
 
             # Extract board cards
-            board_cards, flop_cards, turn_card, river_card = self.extract_board_cards(
+            flop_cards, turn_card, river_card = PokerStars.extract_board_cards(
                 hand_text
             )
 
             # Analyze Hero's actions - USE CLEAN VERSION
-            action_data = self.analyze_hero_actions(
+            action_data = PokerStars.analyze_hero_actions(
                 hand_text, username=username, currency=currency
             )
 
@@ -667,5 +692,8 @@ class PokerStars(Parser):
                 hand_text="",
                 players=[],
             )
+
+    
+
 
 

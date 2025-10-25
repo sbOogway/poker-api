@@ -2,13 +2,18 @@ from src.app.poker.parser.sites.triple_eight import TripleEight
 from pprint import pprint
 from decimal import Decimal
 
-with open("data/888.txt", "r") as f:
+with open("data/zoom888.txt", "r") as f:
     file888 = f.read()
 
 
 parser888 = TripleEight()
 username = "pepoz"
 hands = parser888.parse_file(file888)
+
+print(hands)
+print(len(hands))
+
+exit()
 
 
 table_name = parser888.extract_table_name(hands[0])
@@ -45,17 +50,22 @@ print(showdown)
 rake_info = parser888.extract_rake_info(hands[0])
 print(rake_info)
 
+print("#"*19)
 hand_ids = []
 for hand in hands:
     # rake_info = parser888.extract_rake_info(hand)
-    hand_id = parser888.extract_hand_id(hand)
-    hand_ids.append(hand_id)
+    
     # print(hand_id, rake_info)
     
 
     actions = parser888.analyze_hero_actions(hand, username, None)
+    if not actions:
+        continue
+    hand_id = parser888.extract_hand_id(hand)
+    hand_ids.append(hand_id)
     print(hand_id)
     pprint(actions)
+    
     print("#"*19)
     print()
     # break

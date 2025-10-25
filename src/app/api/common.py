@@ -16,12 +16,15 @@ from ..core.db.database import async_get_db
 from ..crud.crud_hand import crud_hands
 from ..crud.crud_hand_player import crud_hands_player
 
-from ..poker.parser import HeroAnalysisParser, HeroData
+from ..poker.parser.parser import Parser, HeroData
 
-parser = HeroAnalysisParser()
+# parser = Parser()
+
+
 async def analyze_player(
     db: Annotated[AsyncSession, Depends(async_get_db)], username: str
 ):
+    
     hands_player = await crud_hands.get_multi_joined(
         db=db,
         join_model=Game,
@@ -45,6 +48,8 @@ async def analyze_player(
 
 
     for hand in hands_player["data"]:
+        
+        parser = Parser.extract_site(Parser, hand["text"])
 
         if hand["id"] in hands_analyzed:
             continue

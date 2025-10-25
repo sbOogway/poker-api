@@ -37,10 +37,8 @@ from typing import List, Set, Annotated
 
 from ...api import common
 
-parser = Parser()
 
 router = APIRouter(tags=["hands"])
-
 
 @router.post("/upload")
 async def parse_hands(
@@ -57,16 +55,18 @@ async def parse_hands(
     raw_bytes = await file.read()
     text = raw_bytes.decode("utf-8")  # adjust encoding if needed
 
-    hands = parser.parse_file(text)
+    parser = Parser.extract_site(Parser, text)
 
+    hands = parser.parse_file(text)
     players_in_db: Set[str] = await crud_player.select_all_player(db)
     games_in_db: Set[str] = await crud_game.select_all_game(db)
     accounts_in_db: Set[str] = await crud_account.select_all_account(db)
 
     # extract game information and add it to table if not present
     mode = parser.extract_game_mode(hands[0])
+    # print(mode)
     variant = parser.extract_game_variant(hands[0])
-    site = parser.extract_site(hands[0])
+    site = parser.site # parser.extract_site(hands[0])
     currency = parser.extract_currency(hands[0])
     stakes = parser.extract_stakes(hands[0], currency)
     # session_id = parser.extract_session_id(hands[0])
@@ -76,7 +76,7 @@ async def parse_hands(
 
     # custom session id the one from adm is trash
     start_hour = start_time.replace(minute=0, second=0, microsecond=0)
-    session_id = common.custom_hash(start_hour)
+    session_id = common.custom_hash(str(start_hour.timestamp()) + mode)
     # print(session_id)
 
     game_name = f"{mode.upper()}_{variant.upper()}_{stakes.upper()}_{site.upper()}"
@@ -118,7 +118,7 @@ async def parse_hands(
             ),
         )
 
-    hands_in_db: Set[str] = await crud_hands.select_all_hand_session_id(db, session_id)
+    hands_in_db: Set[str] = await crud_hands.select_all_hand(db)
 
     for hand in hands:
         hand_id = parser.extract_hand_id(hand)
@@ -138,9 +138,9 @@ async def parse_hands(
             players_in_db.add(player)
 
         timestamp = parser.extract_timestamp(hand, timezone_name)
-        _, flop, turn, river = parser.extract_board_cards(hand)
+        flop, turn, river = parser.extract_board_cards(hand)
         showdown = parser.extract_showdown(hand)
-        rake, pot = parser.extract_rake_info(hand, currency)
+        rake, pot, _ = parser.extract_rake_info(hand, currency)
 
         await crud_hands.create(
             db=db,

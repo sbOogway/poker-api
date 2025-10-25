@@ -1,4 +1,5 @@
 from ..parser import Parser
+from ..hero_data import HeroData
 import re
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
@@ -6,29 +7,45 @@ from decimal import Decimal, ROUND_HALF_EVEN
 from pprint import pprint
 from typing import List
 
+
 """888 poker hand parser"""
 
 
 class TripleEight(Parser):
-    def extract_game_mode(self, hand_text):
+    site: str = "888"
+    pattern: str = r"888.it|888poker|888 Poker"
+
+    @staticmethod
+    def register():
+        Parser.register_mapper(Parser, TripleEight.site, TripleEight)
+
+    @staticmethod
+    def extract_game_mode(hand_text):
+        if "Snap" in hand_text:
+            return "ZOOM"
         return "CASH"
 
-    def extract_game_variant(self, hand_text):
+    @staticmethod
+    def extract_game_variant(hand_text):
         if "No Limit Holdem" in hand_text:
             return "NLHE"
         raise None
 
-    def extract_session_id(self, hand_text):
+    @staticmethod
+    def extract_session_id(hand_text):
         raise NotImplementedError
 
-    def extract_currency(self, hand_text: str):
+    @staticmethod
+    def extract_currency(hand_text: str):
         return hand_text.splitlines()[2][0]
 
-    def extract_hand_id(self, hand_text):
+    @staticmethod
+    def extract_hand_id(hand_text: str):
         m = re.search(r"#Game No : (\d+)", hand_text)
         return m.group(1)
 
-    def extract_timestamp(self, hand_text, timezone_name):
+    @staticmethod
+    def extract_timestamp(hand_text, timezone_name):
         m = re.search(
             r"\*\*\* (\d{2} \d{2} \d{4} (?:\d{1}|\d{2}):\d{2}:\d{2})", hand_text
         )
@@ -40,21 +57,25 @@ class TripleEight(Parser):
             )
         return None
 
-    def extract_table_name(self, hand_text):
+    @staticmethod
+    def extract_table_name(hand_text):
         m = re.search(r"Table (\w*) ", hand_text)
         return m.group(1) if m else ""
 
-    def extract_players(self, hand_text):
+    @staticmethod
+    def extract_players(hand_text):
         m = re.findall(r"Seat \d: (.*) \(", hand_text)
         return m
 
-    def extract_stakes(self, hand_text, currency):
+    @staticmethod
+    def extract_stakes(hand_text, currency):
         m = re.search(
             r"(" + currency + r"[\d\.]+\/" + currency + r"[\d\.]+)", hand_text
         )
         return m.group(1) if m else ""
 
-    def extract_hero_position(self, hand_text, username):
+    @staticmethod
+    def extract_hero_position(hand_text, username):
         m = re.search(r"Seat (\d) is the button", hand_text)
         button_seat = int(m.group(1))
 
@@ -105,37 +126,43 @@ class TripleEight(Parser):
 
         return result[username]
 
-    def extract_hole_cards_showdown(self, hand_text, username):
+    @staticmethod
+    def extract_hole_cards_showdown(hand_text, username):
         if not "** Dealing river **" in hand_text:
             return []
         # print("dbg river detected")
         m = re.search(username + r" (?:shows|mucks) \[(.*)\]", hand_text)
         return m.group(1).strip().split(", ") if m else []
 
-    def extract_hero_hole_cards(self, hand_text, username):
+    @staticmethod
+    def extract_hero_hole_cards(hand_text, username):
         # raise NotImplementedError
         m = re.search(r"Dealt to " + username + r" \[(.*)\]", hand_text)
         return m.group(1).strip().split(", ") if m else []
 
-    def extract_board_cards(self, hand_text):
+    @staticmethod
+    def extract_board_cards(hand_text):
         if not "** Dealing flop **" in hand_text:
-            return []
+            return [], "", ""
+
         m = re.search(r"\*\* Dealing flop \*\* \[(.*)\]", hand_text)
         flop = m.group(1).strip().split(", ")
 
         if not "** Dealing turn **" in hand_text:
-            return flop
+            return flop, "", ""
+
         m = re.search(r"\*\* Dealing turn \*\* \[(.*)\]", hand_text)
         turn = m.group(1).strip()
 
         if not "** Dealing river **" in hand_text:
-            return flop, turn
+            return flop, turn, ""
+
         m = re.search(r"\*\* Dealing river \*\* \[(.*)\]", hand_text)
         river = m.group(1).strip()
 
         return flop, turn, river
 
-    def _street_bet_matched(self, street, amounts):
+    def _street_bet_matched(street, amounts):
         bets = amounts[street].values()
         if len(set(bets)) <= 1:
             return amounts
@@ -147,17 +174,36 @@ class TripleEight(Parser):
 
     """also player contributions"""
 
-    def extract_rake_info(self, hand_text, currency=None):
+    @staticmethod
+    def extract_rake_info(hand_text, currency=None):
         m = re.findall(r".* collected \[ .([\d\.]+) \]", hand_text)
 
+        players = {}
         total_collected = sum(list(map(lambda x: Decimal(x), m)))
         total_pot_size = Decimal(0.0)
         total_unmacthed = Decimal(0.0)
-
+        # dead_blinds = Decimal("0.00")
         m = re.findall(
             r"(.*) (calls|raises|posts|bets).*\[.([\d\.]+)\]|(.*) (folds)",
             hand_text,
         )
+
+        dead_blinds_re = re.findall(
+            r"(.*) posts dead blind \[.([\d\.]+) \+ .([\d\.]+)\]",
+            hand_text
+        )
+        # print(dead_blinds)
+        for dead_blind in dead_blinds_re:
+            player_id = "__dead_blinds__" # dead_blind[0]
+            first_blind =  Decimal(dead_blind[1])
+            second_blind = Decimal(dead_blind[2])
+            players[player_id] = first_blind + second_blind
+            total_pot_size += first_blind + second_blind
+        # if len(dead_blinds_re) > 0:
+            # dead_blinds = sum(list(map(lambda x: Decimal(x), dead_blinds_re[0])))
+
+        # print("dbg dead blinds")
+        # print(dead_blinds)
 
         for idx, action in enumerate(m[:]):
             tuple_iter = tuple()
@@ -174,7 +220,7 @@ class TripleEight(Parser):
                 tuple_iter += ((element),)
             m[idx] = tuple_iter
 
-        players = {}
+        
 
         for index, action in enumerate(m):
             player = action[0]
@@ -190,44 +236,58 @@ class TripleEight(Parser):
         bets: List[Decimal] = sorted(list(players.values()), reverse=True)
         total_unmacthed = bets[0] - bets[1]
 
-        total_pot_size = total_pot_size - total_unmacthed
+        total_pot_size = total_pot_size - total_unmacthed # + dead_blinds
 
         total_rake_amount = total_pot_size - total_collected
-
+        
+        # print(total_unmacthed)
+        # print(players)
         assert (
-            sum(players.values()) - total_unmacthed
-        ) == total_pot_size, self.extract_hand_id(hand_text)
+            sum(players.values()) - total_unmacthed # + dead_blinds
+        ) == total_pot_size, TripleEight.extract_hand_id(hand_text)
 
         max_player = max(players, key=players.get)
         players[max_player] = bets[1]
 
         expected_rake = total_pot_size * Decimal("0.055")
-        assert sum(players.values()) == total_pot_size
+        assert (sum(players.values()) ) == total_pot_size
 
         assert (expected_rake - total_rake_amount) < Decimal(
             "0.01"
-        ), f"{self.extract_hand_id(hand_text)} - {expected_rake} {total_rake_amount}"
+        ), f"{TripleEight.extract_hand_id(hand_text)} - {expected_rake} {total_rake_amount}"
 
+        # print(expected_rake, total_rake_amount)
         assert (
             total_collected + total_rake_amount
-        ) == total_pot_size, f"{self.extract_hand_id(hand_text)} - {total_collected} {total_rake_amount} {total_pot_size}"
+        ) == total_pot_size, f"{TripleEight.extract_hand_id(hand_text)} - {total_collected} {total_rake_amount} {total_pot_size}"
 
+        # print("dbg players")
+        # print(players)
         return total_rake_amount, total_pot_size, players
 
-    def extract_showdown(self, hand_text):
+    @staticmethod
+    def extract_showdown(hand_text):
         if not "** Dealing river **" in hand_text:
             return False
         m = re.findall(r".* shows \[.*\]|.* mucks \[.*\]", hand_text)
         return len(m) > 1
 
-    def detect_multi_player_showdown(self, hand_text, username):
+    @staticmethod
+    def detect_multi_player_showdown(hand_text, username):
         if not "** Dealing river **" in hand_text:
             return False
         m = re.findall(r".* shows \[.*\]|.* mucks \[.*\]", hand_text)
         return len(m) > 2
 
-    def analyze_hero_actions(self, hand_text, username, currency):
+    @staticmethod
+    def analyze_hero_actions(hand_text, username, currency):
         # raise NotImplementedError
+
+        players_in_pot = TripleEight.extract_players(hand_text)
+        # print(players_in_pot)
+        if username not in players_in_pot:
+            return
+
         actions = {
             "total_contributed": Decimal(0.0),
             "total_collected": Decimal(0.0),
@@ -257,21 +317,24 @@ class TripleEight(Parser):
             "three_bet": False,
             "four_bet": False,
             "five_bet": False,
+
+            "won_when_saw_flop": False
         }
 
-        rake, pot_size, players = self.extract_rake_info(hand_text)
+        rake, pot_size, players = TripleEight.extract_rake_info(hand_text)
         m = re.findall(username + r" collected \[ .([\d\.]+) \]", hand_text)
 
         total_contributed = players[username]
-
+        # print(m)
         if len(m) == 1:
             total_collected = Decimal(m[0])
         elif len(m) == 0:
             total_collected = Decimal("0.00")
         else:
-            raise ArithmeticError(
-                f"Check this hand bro {self.extract_hand_id(hand_text)}"
-            )
+            total_collected = sum(list(map(lambda x: Decimal(x), m)))
+            # raise ArithmeticError(
+            #     f"Check this hand bro {TripleEight.extract_hand_id(hand_text)}"
+            # )
 
         actions["total_collected"] = total_collected
         actions["net_profit"] = total_collected - total_contributed
@@ -287,8 +350,76 @@ class TripleEight(Parser):
 
         return actions
 
-    def parse_file(self, text):
+    @staticmethod
+    def parse_file(text: str):
+        if "\r\n" in text:
+            return text.split("\r\n" * 4)[:-1]
         return text.split("\n" * 4)[:-1]
 
-    def parse_hand(self, hand_text, currency, username):
-        raise NotImplementedError
+    @staticmethod
+    def parse_hand(hand_text, currency, username):
+        hand_id = TripleEight.extract_hand_id(hand_text)
+        site = TripleEight.site
+        table_name = TripleEight.extract_table_name(hand_text)
+        stakes = TripleEight.extract_stakes(hand_text, currency)
+        position = TripleEight.extract_hero_position(hand_text, username)
+
+        hole_cards = TripleEight.extract_hero_hole_cards(hand_text, username)
+        players = TripleEight.extract_players(hand_text)
+
+        # Extract board cards
+        flop_cards, turn_card, river_card = TripleEight.extract_board_cards(
+            hand_text
+        )
+
+        action_data = TripleEight.analyze_hero_actions(
+            hand_text, username=username, currency=currency
+        )
+
+        return HeroData(
+                hand_id=hand_id,
+                hand_text=hand_text,
+                # timestamp=timestamp,
+                site=site,
+                stakes=stakes,
+                table_name=table_name,
+                position=position,
+                hole_cards=hole_cards,
+                players=players,
+                went_to_showdown=action_data["went_to_showdown"],
+                won_at_showdown=action_data["won_at_showdown"],
+                won_when_saw_flop=action_data["won_when_saw_flop"],
+                saw_flop=action_data["saw_flop"],
+                total_contributed=action_data["total_contributed"],
+                total_collected=action_data["total_collected"],
+                net_profit=action_data["net_profit"],
+                rake_amount=action_data["rake_amount"],
+                net_profit_before_rake=action_data["net_profit_before_rake"],
+                # net_profit_after_rake=action_data["net_profit_after_rake"],
+                total_pot_size=action_data["total_pot_size"],
+                preflop_actions=action_data["preflop_actions"],
+                flop_actions=action_data["flop_actions"],
+                turn_actions=action_data["turn_actions"],
+                river_actions=action_data["river_actions"],
+                flop_cards=flop_cards,
+                turn_card=turn_card,
+                river_card=river_card,
+                preflop_raised=action_data["preflop_raised"],
+                preflop_called=action_data["preflop_called"],
+                preflop_folded=action_data["preflop_folded"],
+                vpip=action_data["vpip"],
+                cbet_flop=action_data["cbet_flop"],
+                cbet_turn=action_data["cbet_turn"],
+                cbet_river=action_data["cbet_river"],
+                cbet_flop_opportunity=action_data["cbet_flop_opportunity"],
+                cbet_turn_opportunity=action_data["cbet_turn_opportunity"],
+                cbet_river_opportunity=action_data["cbet_river_opportunity"],
+                limped=action_data["limped"],
+                called=action_data["called"],
+                serial_caller=action_data["serial_caller"],
+                single_raised_pot=action_data["single_raised_pot"],
+                three_bet=action_data["three_bet"],
+                four_bet=action_data["four_bet"],
+                five_bet=action_data["five_bet"],
+            )
+
