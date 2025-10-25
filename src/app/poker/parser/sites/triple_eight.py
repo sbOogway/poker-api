@@ -250,6 +250,10 @@ class TripleEight(Parser):
         players[max_player] = bets[1]
 
         expected_rake = total_pot_size * Decimal("0.055")
+
+        if not "Dealing flop" in hand_text:
+            expected_rake = Decimal("0.00")
+
         assert (sum(players.values()) ) == total_pot_size
 
         assert (expected_rake - total_rake_amount) < Decimal(
