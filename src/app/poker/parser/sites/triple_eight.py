@@ -197,7 +197,8 @@ class TripleEight(Parser):
             player_id = "__dead_blinds__" # dead_blind[0]
             first_blind =  Decimal(dead_blind[1])
             second_blind = Decimal(dead_blind[2])
-            players[player_id] = first_blind + second_blind
+            players[dead_blind[0]] = second_blind
+            players[player_id] = first_blind 
             total_pot_size += first_blind + second_blind
         # if len(dead_blinds_re) > 0:
             # dead_blinds = sum(list(map(lambda x: Decimal(x), dead_blinds_re[0])))
@@ -260,7 +261,8 @@ class TripleEight(Parser):
             "0.01"
         ), f"{TripleEight.extract_hand_id(hand_text)} - {expected_rake} {total_rake_amount}"
 
-        # print(expected_rake, total_rake_amount)
+        print("dbg rake")
+        print(expected_rake, total_rake_amount)
         assert (
             total_collected + total_rake_amount
         ) == total_pot_size, f"{TripleEight.extract_hand_id(hand_text)} - {total_collected} {total_rake_amount} {total_pot_size}"

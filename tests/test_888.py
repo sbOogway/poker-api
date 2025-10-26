@@ -2,7 +2,7 @@ from src.app.poker.parser.sites.triple_eight import TripleEight
 from pprint import pprint
 from decimal import Decimal
 
-with open("data/zoom888.txt", "r") as f:
+with open("data/888.txt", "r") as f:
     file888 = f.read()
 
 
@@ -13,7 +13,7 @@ hands = parser888.parse_file(file888)
 print(hands)
 print(len(hands))
 
-exit()
+# exit()
 
 
 table_name = parser888.extract_table_name(hands[0])
@@ -29,26 +29,26 @@ print(currency)
 
 # for hand in hands:
 
-positions = parser888.extract_hero_position(hands[0], username)
-print(positions)
+# positions = parser888.extract_hero_position(hands[0], username)
+# print(positions)
 
-hole_cards = parser888.extract_hole_cards_showdown(hands[0], username)
-print(hole_cards)
+# hole_cards = parser888.extract_hole_cards_showdown(hands[0], username)
+# print(hole_cards)
 
-hero_hole_cards = parser888.extract_hero_hole_cards(hands[0], username)
-print(hero_hole_cards)
-
-
-board_cards = parser888.extract_board_cards(hands[0])
-print(board_cards)
+# hero_hole_cards = parser888.extract_hero_hole_cards(hands[0], username)
+# print(hero_hole_cards)
 
 
+# board_cards = parser888.extract_board_cards(hands[0])
+# print(board_cards)
 
-showdown = parser888.extract_showdown(hands[0])
-print(showdown)
 
-rake_info = parser888.extract_rake_info(hands[0])
-print(rake_info)
+
+# showdown = parser888.extract_showdown(hands[0])
+# print(showdown)
+
+# rake_info = parser888.extract_rake_info(hands[0])
+# print(rake_info)
 
 print("#"*19)
 hand_ids = []
@@ -59,16 +59,20 @@ for hand in hands:
     
 
     actions = parser888.analyze_hero_actions(hand, username, None)
+    print(actions)
+    # exit()
+
     if not actions:
         continue
     hand_id = parser888.extract_hand_id(hand)
     hand_ids.append(hand_id)
+
     print(hand_id)
     pprint(actions)
     
     print("#"*19)
     print()
-    # break
+    break
 
 print(len(hands))
 print(len(set(hand_ids)))
