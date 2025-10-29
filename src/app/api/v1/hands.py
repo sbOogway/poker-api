@@ -74,12 +74,13 @@ async def parse_hands(
     table_name = parser.extract_table_name(hands[0])
     end_time = parser.extract_timestamp(hands[-1], timezone_name)
 
+    game_name = f"{mode.upper()}_{variant.upper()}_{stakes.upper()}_{site.upper()}"
     # custom session id the one from adm is trash
     start_hour = start_time.replace(minute=0, second=0, microsecond=0)
-    session_id = common.custom_hash(str(start_hour.timestamp()) + mode)
+    session_id = common.custom_hash(str(start_hour.timestamp()) + game_name + table_name)
     # print(session_id)
 
-    game_name = f"{mode.upper()}_{variant.upper()}_{stakes.upper()}_{site.upper()}"
+    
 
     if game_name not in games_in_db:
         await crud_game.create(
@@ -104,6 +105,9 @@ async def parse_hands(
 
     sessions_in_db: Set[str] = await crud_session.select_all_session(db, game_name)
 
+    print(hands[-1])
+    print(parser.extract_hand_id(hands[-1]))
+    print(end_time)
     if session_id not in sessions_in_db:
         await crud_session.create(
             db=db,

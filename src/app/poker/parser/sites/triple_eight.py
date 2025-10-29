@@ -261,8 +261,8 @@ class TripleEight(Parser):
             "0.01"
         ), f"{TripleEight.extract_hand_id(hand_text)} - {expected_rake} {total_rake_amount}"
 
-        print("dbg rake")
-        print(expected_rake, total_rake_amount)
+        # print("dbg rake")
+        # print(expected_rake, total_rake_amount)
         assert (
             total_collected + total_rake_amount
         ) == total_pot_size, f"{TripleEight.extract_hand_id(hand_text)} - {total_collected} {total_rake_amount} {total_pot_size}"
