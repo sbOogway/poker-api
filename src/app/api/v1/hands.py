@@ -40,6 +40,7 @@ from ...api import common
 
 router = APIRouter(tags=["hands"])
 
+
 @router.post("/upload")
 async def parse_hands(
     db: Annotated[AsyncSession, Depends(async_get_db)],
@@ -66,7 +67,7 @@ async def parse_hands(
     mode = parser.extract_game_mode(hands[0])
     # print(mode)
     variant = parser.extract_game_variant(hands[0])
-    site = parser.site # parser.extract_site(hands[0])
+    site = parser.site  # parser.extract_site(hands[0])
     currency = parser.extract_currency(hands[0])
     stakes = parser.extract_stakes(hands[0], currency)
     # session_id = parser.extract_session_id(hands[0])
@@ -77,10 +78,10 @@ async def parse_hands(
     game_name = f"{mode.upper()}_{variant.upper()}_{stakes.upper()}_{site.upper()}"
     # custom session id the one from adm is trash
     start_hour = start_time.replace(minute=0, second=0, microsecond=0)
-    session_id = common.custom_hash(str(start_hour.timestamp()) + game_name + table_name)
+    session_id = common.custom_hash(
+        str(start_hour.timestamp()) + game_name + table_name
+    )
     # print(session_id)
-
-    
 
     if game_name not in games_in_db:
         await crud_game.create(
@@ -210,15 +211,10 @@ async def get(
     session_id: str = Query("all", description="session to retrieve hands from"),
 ):
     base_kwargs = dict(
-        db=db,
-        join_model=Hand,
-        schema_to_select=HandPlayerBase,
-        join_schema_to_select=HandBase,
-        player_id__like=player_id,
-        limit=None,
-        # sort_columns="time",
-        # sort_orders="asc",
+        db=db, player_id__like=player_id, **common.hand_joined_hand_player_kwargs
     )
+    print(base_kwargs)
+    # return None
 
     if session_id == "all":
         hands = await crud_hands_player.get_multi_joined(**base_kwargs)
@@ -233,3 +229,11 @@ async def get(
 @router.get("/rake")
 async def get_rake(db: Annotated[AsyncSession, Depends(async_get_db)]):
     return await crud_hands.get_multi(db, schema_to_select=HandRakePot, limit=10_000)
+
+
+@router.get("/ev")
+async def calculate_ev(
+    db: Annotated[AsyncSession, Depends(async_get_db)],
+    player_id: str = Query(..., description="Player id to calculate ev"),
+):
+    return await common.calculate_ev_showdown(db, player_id)

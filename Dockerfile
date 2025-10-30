@@ -13,8 +13,11 @@ WORKDIR /app
 #     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
 #     uv sync --no-install-project
 
+
 # Copy the project source code
 COPY . /app
+
+COPY bin/equity /bin/equity
 
 RUN uv lock
 
@@ -31,9 +34,13 @@ RUN groupadd --gid 1000 app \
 
 # Copy the virtual environment from the builder stage
 COPY --from=builder --chown=app:app /app/.venv /app/.venv
-
+COPY --from=builder /bin/equity /bin/equity
 # Ensure the virtual environment is in the PATH
 ENV PATH="/app/.venv/bin:$PATH"
+
+
+RUN apt upgrade && apt update
+RUN apt install nodejs -y
 
 # Switch to the non-root user
 USER app

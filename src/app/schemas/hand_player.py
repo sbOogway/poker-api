@@ -69,6 +69,11 @@ class HandPlayerBase(BaseModel):
     three_bet: bool = Field(False, description="Three‑bet occurred")
     four_bet: bool = Field(False, description="Four‑bet occurred")
     five_bet: bool = Field(False, description="Five‑bet occurred")
+
+    ev_pre: float = Field(None, description="ev of hero actions preflop")
+    ev_flop: float = Field(None, description="ev of hero actions flop")
+    ev_turn: float = Field(None, description="ev of hero actions turn")
+    ev_river: float = Field(None, description="ev of hero actions river")
  
 
 class HandPlayerReport(BaseModel):
@@ -79,6 +84,14 @@ class HandPlayerReport(BaseModel):
     preflop_raised: bool
     preflop_called: bool
     preflop_folded: bool
+
+
+class HandPlayerEv(BaseModel):
+    ev_pre: float
+    ev_flop: float
+    ev_turn: float
+    ev_river: float
+
 
 class HandPlayerCreate(HandPlayerBase):
     pass

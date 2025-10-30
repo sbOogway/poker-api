@@ -58,3 +58,8 @@ class HandPlayer(Base):
     four_bet: Mapped[bool] = mapped_column(Boolean, default=False)
     five_bet: Mapped[bool] = mapped_column(Boolean, default=False)
 
+
+    ev_pre: Mapped[float] = mapped_column(Float, default=None, nullable=True)
+    ev_flop: Mapped[float] = mapped_column(Float, default=None, nullable=True)
+    ev_turn: Mapped[float] = mapped_column(Float, default=None, nullable=True)
+    ev_river: Mapped[float] = mapped_column(Float, default=None, nullable=True)

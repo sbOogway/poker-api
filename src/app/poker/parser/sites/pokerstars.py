@@ -10,6 +10,8 @@ from ..hero_data import HeroData
 class PokerStars(Parser):
     site: str = "PokerStars"
     pattern: str = r"PokerStars"
+    blinds_pattern: str = r".* posts.*blind.*([\d\.]+)"
+    contribution_pattern: str = r"(.*): (?:bets|raises|calls) .([\d\.]+).*"
 
     @staticmethod
     def register():

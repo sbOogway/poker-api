@@ -21,6 +21,8 @@ class Parser(ABC):
     site_mapper: dict[str, Self] = {}
     site: str
     pattern: str
+    blinds_pattern: str
+    contribution_pattern: str
 
         
     def register_mapper(self, site: str, cls: Self) -> Callable:
@@ -119,3 +121,7 @@ class Parser(ABC):
     @abstractmethod
     def parse_hand(self, hand_text, currency, username) -> HeroData:
         """parse hand into HeroData class"""
+
+    @abstractmethod
+    def extract_streets_text(self, hand_text):
+        """extract text for each street"""

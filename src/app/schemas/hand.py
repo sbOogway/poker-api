@@ -47,6 +47,9 @@ class HandRakePot(BaseModel):
 class HandSessionId(BaseModel):
     session_id: str
 
+class HandText(BaseModel):    
+    text: str
+
 class HandCreate(HandBase):
     pass
 

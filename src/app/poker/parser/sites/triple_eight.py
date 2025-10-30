@@ -14,6 +14,8 @@ from typing import List
 class TripleEight(Parser):
     site: str = "888"
     pattern: str = r"888.it|888poker|888 Poker"
+    blinds_pattern: str = r".* posts.*blind.*\[.([\d\.]+)\]"
+    contribution_pattern: str = r"(.*) (?:bets|raises|calls) \[.([\d\.]+)\]"
 
     @staticmethod
     def register():
@@ -429,3 +431,6 @@ class TripleEight(Parser):
                 five_bet=action_data["five_bet"],
             )
 
+    @staticmethod
+    def extract_streets_text(hand_text:str):
+        return hand_text.split("** Dealing")
