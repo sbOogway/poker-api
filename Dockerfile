@@ -13,6 +13,7 @@ WORKDIR /app
 #     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
 #     uv sync --no-install-project
 
+RUN apt upgrade && apt update
 RUN apt install wget
 
 
