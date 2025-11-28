@@ -25,3 +25,6 @@ jobs:
       
     - name: Push to ghcr.io
       run: docker push ghcr.io/sboogway/poker-api:$GITHUB_SHA
+
+    - name: Debug
+      run: echo pwd && whoami
