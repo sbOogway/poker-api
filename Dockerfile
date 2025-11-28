@@ -13,6 +13,8 @@ WORKDIR /app
 #     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
 #     uv sync --no-install-project
 
+RUN apt install wget
+
 
 # Copy the project source code
 COPY . /app
