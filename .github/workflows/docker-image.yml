@@ -20,5 +20,8 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag ghcr.io/sboogway/poker-api:$GITHUB_SHA
 
+    - name: Login to ghcr.io
+      run: docker login ghcr.io -u sboogway -p ${{ secrets.GH_PAT }}
+      
     - name: Push to ghcr.io
       run: docker push ghcr.io/sboogway/poker-api:$GITHUB_SHA
