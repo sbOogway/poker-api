@@ -4,6 +4,7 @@ from datetime import datetime
 
 class PlayerBase(BaseModel):
     id: str = Field(..., description="player id")
+    site: str = Field(..., description="site")
 
 class PlayerCreate(PlayerBase):
     pass

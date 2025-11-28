@@ -138,7 +138,7 @@ async def parse_hands(
             if player in players_in_db:
                 continue
 
-            await crud_player.create(db=db, object=PlayerCreate(id=player))
+            await crud_player.create(db=db, object=PlayerCreate(id=player, site=parser.site))
 
             players_in_db.add(player)
 
