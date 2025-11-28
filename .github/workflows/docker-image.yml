@@ -33,4 +33,4 @@ jobs:
       run: cp ~/.poker-api.env src/.env
 
     - name: run docker compose 
-      run: docker compose up --d
+      run: docker compose up -d
