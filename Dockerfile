@@ -27,6 +27,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 # --------- Final Stage ---------
 FROM python:3.11-slim-bookworm
+LABEL org.opencontainers.image.source="https://github.com/sbOogway/poker-api"
 
 # Create a non-root user for security
 RUN groupadd --gid 1000 app \
