@@ -6,6 +6,7 @@ services:
     image: ghcr.io/sboogway/poker-api:latest
     # -------- replace with comment to run with gunicorn --------
     command: uvicorn app.main:app --host 0.0.0.0 --port 8008 --reload
+    restart: unless-stopped
     # command: gunicorn app.main:app -w 4 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000
     env_file:
       - ./src/.env
@@ -26,6 +27,7 @@ services:
       context: .
       dockerfile: Dockerfile
     command: arq app.core.worker.settings.WorkerSettings
+    restart: unless-stopped
     env_file:
       - ./src/.env
     # depends_on:
