@@ -1,0 +1,24 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      packages: write
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag ghcr.io/sboogway/poker-api:$GITHUB_WORKFLOW_SHA
+
+    - name: Push to ghcr.io
+      run: docker push ghcr.io/sboogway/poker-api:$GITHUB_WORKFLOW_SHA
