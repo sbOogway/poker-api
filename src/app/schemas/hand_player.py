@@ -1,7 +1,6 @@
-from pydantic import BaseModel, Field
-from typing import Annotated, List
-from datetime import datetime
+from typing import List
 
+from pydantic import BaseModel, Field
 
 
 class HandPlayerBase(BaseModel):
@@ -26,14 +25,14 @@ class HandPlayerBase(BaseModel):
     net_profit: float = Field(0.0, description="Net profit (collected‑contributed)")
 
     # Rake analysis
-    
+
     net_profit_before_rake: float = Field(
         0.0, description="Profit before rake deduction"
     )
     net_profit_after_rake: float = Field(
         0.0, description="Profit after rake deduction"
     )
-    
+
 
     # Hand progression (action counts per street)
     preflop_actions: int = Field(0, description="Number of actions pre‑flop")
@@ -74,7 +73,7 @@ class HandPlayerBase(BaseModel):
     ev_flop: float = Field(None, description="ev of hero actions flop")
     ev_turn: float = Field(None, description="ev of hero actions turn")
     ev_river: float = Field(None, description="ev of hero actions river")
- 
+
 
 class HandPlayerReport(BaseModel):
     net_profit: float

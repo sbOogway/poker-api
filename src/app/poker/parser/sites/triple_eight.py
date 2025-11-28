@@ -1,12 +1,11 @@
-from ..parser import Parser
-from ..hero_data import HeroData
 import re
-from datetime import datetime, timezone
-from zoneinfo import ZoneInfo
-from decimal import Decimal, ROUND_HALF_EVEN
-from pprint import pprint
+from datetime import UTC, datetime
+from decimal import Decimal
 from typing import List
+from zoneinfo import ZoneInfo
 
+from ..hero_data import HeroData
+from ..parser import Parser
 
 """888 poker hand parser"""
 
@@ -55,7 +54,7 @@ class TripleEight(Parser):
             return (
                 datetime.strptime(m.group(1), "%d %m %Y %H:%M:%S")
                 .replace(tzinfo=ZoneInfo(timezone_name))
-                .astimezone(timezone.utc)
+                .astimezone(UTC)
             )
         return None
 
@@ -130,7 +129,7 @@ class TripleEight(Parser):
 
     @staticmethod
     def extract_hole_cards_showdown(hand_text, username):
-        if not "** Dealing river **" in hand_text:
+        if "** Dealing river **" not in hand_text:
             return []
         # print("dbg river detected")
         m = re.search(username + r" (?:shows|mucks) \[(.*)\]", hand_text)
@@ -144,19 +143,19 @@ class TripleEight(Parser):
 
     @staticmethod
     def extract_board_cards(hand_text):
-        if not "** Dealing flop **" in hand_text:
+        if "** Dealing flop **" not in hand_text:
             return [], "", ""
 
         m = re.search(r"\*\* Dealing flop \*\* \[(.*)\]", hand_text)
         flop = m.group(1).strip().split(", ")
 
-        if not "** Dealing turn **" in hand_text:
+        if "** Dealing turn **" not in hand_text:
             return flop, "", ""
 
         m = re.search(r"\*\* Dealing turn \*\* \[(.*)\]", hand_text)
         turn = m.group(1).strip()
 
-        if not "** Dealing river **" in hand_text:
+        if "** Dealing river **" not in hand_text:
             return flop, turn, ""
 
         m = re.search(r"\*\* Dealing river \*\* \[(.*)\]", hand_text)
@@ -200,7 +199,7 @@ class TripleEight(Parser):
             first_blind =  Decimal(dead_blind[1])
             second_blind = Decimal(dead_blind[2])
             players[dead_blind[0]] = second_blind
-            players[player_id] = first_blind 
+            players[player_id] = first_blind
             total_pot_size += first_blind + second_blind
         # if len(dead_blinds_re) > 0:
             # dead_blinds = sum(list(map(lambda x: Decimal(x), dead_blinds_re[0])))
@@ -223,7 +222,7 @@ class TripleEight(Parser):
                 tuple_iter += ((element),)
             m[idx] = tuple_iter
 
-        
+
 
         for index, action in enumerate(m):
             player = action[0]
@@ -242,7 +241,7 @@ class TripleEight(Parser):
         total_pot_size = total_pot_size - total_unmacthed # + dead_blinds
 
         total_rake_amount = total_pot_size - total_collected
-        
+
         # print(total_unmacthed)
         # print(players)
         assert (
@@ -254,7 +253,7 @@ class TripleEight(Parser):
 
         expected_rake = total_pot_size * Decimal("0.055")
 
-        if not "Dealing flop" in hand_text:
+        if "Dealing flop" not in hand_text:
             expected_rake = Decimal("0.00")
 
         assert (sum(players.values()) ) == total_pot_size
@@ -275,14 +274,14 @@ class TripleEight(Parser):
 
     @staticmethod
     def extract_showdown(hand_text):
-        if not "** Dealing river **" in hand_text:
+        if "** Dealing river **" not in hand_text:
             return False
         m = re.findall(r".* shows \[.*\]|.* mucks \[.*\]", hand_text)
         return len(m) > 1
 
     @staticmethod
     def detect_multi_player_showdown(hand_text, username):
-        if not "** Dealing river **" in hand_text:
+        if "** Dealing river **" not in hand_text:
             return False
         m = re.findall(r".* shows \[.*\]|.* mucks \[.*\]", hand_text)
         return len(m) > 2

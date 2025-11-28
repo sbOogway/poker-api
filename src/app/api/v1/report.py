@@ -1,28 +1,20 @@
-from fastapi import APIRouter, Depends, Request, UploadFile, File, HTTPException, Query
-
-from ...core.db.database import async_get_db
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, text
-
-
-from ...models.report import Report
-from ...models.hand import Hand
-
-from ...schemas.report import ReportBase
-from ...schemas.player import PlayerBase
-from ...schemas.hand_player import HandPlayerReport
-from ...schemas.hand import HandSessionId, HandBase
-
-from ...crud.crud_report import crud_report
-from ...crud.crud_player import crud_player
-from ...crud.crud_hand_player import crud_hands_player
-from ...crud.crud_stat import crud_stat
-from ...crud.crud_session import crud_session
-
-from typing import Annotated
 from datetime import datetime
+from typing import Annotated
+
+from fastapi import APIRouter, Depends
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from ...api import common
+from ...core.db.database import async_get_db
+from ...crud.crud_hand_player import crud_hands_player
+from ...crud.crud_player import crud_player
+from ...crud.crud_report import crud_report
+from ...models.hand import Hand
+from ...schemas.hand import HandSessionId
+from ...schemas.hand_player import HandPlayerReport
+from ...schemas.player import PlayerBase
+from ...schemas.report import ReportBase
 
 router = APIRouter(tags=["report"])
 

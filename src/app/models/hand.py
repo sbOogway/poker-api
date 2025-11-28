@@ -1,11 +1,10 @@
-from ..core.db.database import Base
+from datetime import UTC, datetime
+from typing import List
 
-from sqlalchemy import DateTime, ForeignKey, String, Boolean, JSON, Float
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import JSON, Boolean, DateTime, Float, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from typing import List
-from datetime import UTC, datetime
+from ..core.db.database import Base
 
 
 class Hand(Base):

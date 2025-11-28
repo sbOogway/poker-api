@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, Field, ConfigDict, field_validator
+from pydantic import BaseModel, Field
 
 
 class SessionBase(BaseModel):
@@ -14,10 +14,10 @@ class SessionBase(BaseModel):
 
     cash_in: float = Field(None, description="Money in")
     cash_out: float = Field(None, description="Money out")
-    
+
     game: str = Field(..., description="Foreign key to ``game.name``.")
     account: str = Field(..., description="Foreign key to ``account.name``.")
-    
+
     start_time: datetime = Field(..., description="When the session started (UTC).")
     end_time: datetime = Field(..., description="When the session ended (UTC).")
 

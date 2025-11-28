@@ -1,8 +1,17 @@
 from fastcrud import FastCRUD
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from ..models.player import Player
-from ..schemas.player import PlayerCreate, PlayerCreateInternal, PlayerRead, PlayerUpdate, PlayerUpdateInternal, PlayerDelete
+from ..schemas.player import (
+    PlayerCreate,
+    PlayerCreateInternal,
+    PlayerDelete,
+    PlayerRead,
+    PlayerUpdate,
+    PlayerUpdateInternal,
+)
+
 
 async def select_all_player(db: AsyncSession) -> set[str]:
     stmt = select(Player.id)

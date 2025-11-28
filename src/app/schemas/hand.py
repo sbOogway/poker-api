@@ -1,6 +1,7 @@
-from pydantic import BaseModel, Field
-from typing import Annotated, List
 from datetime import datetime
+from typing import Annotated, List
+
+from pydantic import BaseModel, Field
 
 
 class HandBase(BaseModel):
@@ -47,7 +48,7 @@ class HandRakePot(BaseModel):
 class HandSessionId(BaseModel):
     session_id: str
 
-class HandText(BaseModel):    
+class HandText(BaseModel):
     text: str
 
 class HandCreate(HandBase):

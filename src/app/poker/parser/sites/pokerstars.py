@@ -1,10 +1,10 @@
-from ..parser import Parser, re
-from datetime import datetime, timezone
-from zoneinfo import ZoneInfo
-from decimal import Decimal
 import traceback
-from ..hero_data import HeroData
+from datetime import UTC, datetime
+from decimal import Decimal
+from zoneinfo import ZoneInfo
 
+from ..hero_data import HeroData
+from ..parser import Parser, re
 
 
 class PokerStars(Parser):
@@ -66,7 +66,7 @@ class PokerStars(Parser):
             return (
                 datetime.strptime(m.group(1), "%Y/%m/%d %H:%M:%S")
                 .replace(tzinfo=ZoneInfo(timezone_name))
-                .astimezone(timezone.utc)
+                .astimezone(UTC)
             )
         return datetime.now()
 
@@ -143,14 +143,14 @@ class PokerStars(Parser):
 
             players[idx] = player | dict(position=positions[idx])
             result[player["id"]] = positions[idx]
-        
+
         # print(result)
 
         return result[username]
 
     @staticmethod
     def extract_hole_cards_showdown(hand_text, username):
-        if not "*** SHOW DOWN ***" in hand_text:
+        if "*** SHOW DOWN ***" not in hand_text:
             return []
 
         m = re.search(username + r": shows\s*\[([^\]]+)\]", hand_text, re.IGNORECASE)
@@ -608,7 +608,7 @@ class PokerStars(Parser):
 
         return actions
 
-    
+
     @staticmethod
     def parse_hand(hand_text: str, currency: str, username: str) -> HeroData:
         """Parse a single hand and extract Hero-specific data"""
@@ -680,7 +680,7 @@ class PokerStars(Parser):
                 five_bet=action_data["five_bet"],
             )
 
-        except Exception as e:
+        except Exception:
             print(traceback.print_exc())
             # logger.error(f"Error parsing hand: {e}")
             return HeroData(

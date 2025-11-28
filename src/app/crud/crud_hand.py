@@ -1,16 +1,15 @@
 from fastcrud import FastCRUD
-
-from sqlalchemy import select, or_, and_
+from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from ..models.hand import Hand
-from ..models.game import Game
 from ..schemas.hand import (
     HandCreate,
     HandCreateInternal,
+    HandDelete,
     HandRead,
     HandUpdate,
     HandUpdateInternal,
-    HandDelete,
 )
 
 

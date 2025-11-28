@@ -1,15 +1,15 @@
 from fastcrud import FastCRUD
-
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from ..models.hand_player import HandPlayer
 from ..schemas.hand_player import (
     HandPlayerCreate,
     HandPlayerCreateInternal,
+    HandPlayerDelete,
     HandPlayerRead,
     HandPlayerUpdate,
     HandPlayerUpdateInternal,
-    HandPlayerDelete,
 )
 
 

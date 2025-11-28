@@ -1,10 +1,8 @@
 from __future__ import annotations
 
-from datetime import datetime, UTC
 from typing import Optional
 
-from pydantic import BaseModel, Field, validator
-from uuid import UUID  # not used in the model but kept for completeness
+from pydantic import BaseModel, Field
 
 
 class GameBase(BaseModel):
@@ -32,7 +30,7 @@ class GameBase(BaseModel):
 class GameReadCurrency(BaseModel):
     currency: str
 
-    
+
 class GameCreate(GameBase):
     pass
 

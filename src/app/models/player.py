@@ -1,11 +1,10 @@
-from ..core.db.database import Base
+from datetime import UTC, datetime
 
-from typing import List
-from sqlalchemy import DateTime, ForeignKey, String, Float, Text, JSON, Boolean, Integer
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import DateTime
 from sqlalchemy.orm import Mapped, mapped_column
 
-from datetime import UTC, datetime
+from ..core.db.database import Base
+
 
 class Player(Base):
     __tablename__ = "player"

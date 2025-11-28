@@ -1,12 +1,11 @@
-from fastapi import APIRouter, Depends, Request, UploadFile, File, HTTPException, Query
-from ...core.db.database import async_get_db
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from ...crud.crud_player import crud_player
 from typing import Annotated
 
+from fastapi import APIRouter, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from ...core.db.database import async_get_db
+from ...crud.crud_player import crud_player
 from ...schemas.player import PlayerBase
-import json
 
 router = APIRouter(tags=["players"])
 

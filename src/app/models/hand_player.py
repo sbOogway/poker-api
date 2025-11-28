@@ -1,11 +1,9 @@
-from ..core.db.database import Base
-
 from typing import List
-from sqlalchemy import DateTime, ForeignKey, String, Float, Text, JSON, Boolean, Integer
-from sqlalchemy.dialects.postgresql import UUID
+
+from sqlalchemy import JSON, Boolean, Float, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from datetime import UTC, datetime
+from ..core.db.database import Base
 
 """
 Hand seen by the perspective of each user in a hand
@@ -19,7 +17,7 @@ class HandPlayer(Base):
 
     position: Mapped[str] = mapped_column(String, nullable=False)
     hole_cards: Mapped[List[str]] | None = mapped_column(JSON, nullable=True)
-    
+
     won_at_showdown: Mapped[bool] = mapped_column(Boolean, default=False)  # W$SD
     won_when_saw_flop: Mapped[bool] = mapped_column(Boolean, default=False)
     saw_flop: Mapped[bool] = mapped_column(Boolean, default=False)
@@ -28,10 +26,10 @@ class HandPlayer(Base):
     total_collected: Mapped[float] = mapped_column(Float, default=0.0)
     net_profit: Mapped[float] = mapped_column(Float, default=0.0)
 
-    
+
     net_profit_before_rake: Mapped[float] = mapped_column(Float, default=0.0)
     net_profit_after_rake: Mapped[float] = mapped_column(Float, default=0.0)
-    
+
 
     preflop_actions: Mapped[int] = mapped_column(Integer, default=0)
     flop_actions: Mapped[int] = mapped_column(Integer, default=0)

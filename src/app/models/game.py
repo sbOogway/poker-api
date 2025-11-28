@@ -1,11 +1,10 @@
-from ..core.db.database import Base
+from datetime import UTC, datetime
 
-from sqlalchemy import DateTime, ForeignKey, String, Boolean, JSON
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import DateTime, String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from typing import List
-from datetime import UTC, datetime
+from ..core.db.database import Base
+
 
 class Game(Base):
     __tablename__ = "game"
@@ -23,8 +22,8 @@ class Game(Base):
     # plo, 6max, nlhe
     variant: Mapped[str] | None = mapped_column(String)
 
-    
+
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default_factory=lambda: datetime.now(UTC))
     updated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), default=None)
-    
+
 

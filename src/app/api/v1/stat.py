@@ -1,13 +1,10 @@
-from fastapi import APIRouter, Depends, Request, UploadFile, File, HTTPException, Query
+from typing import Annotated
 
-from ...core.db.database import async_get_db
+from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ...models.stat import Stat
-from ...schemas.stat import StatBase
+from ...core.db.database import async_get_db
 from ...crud.crud_stat import crud_stat
-
-from typing import Annotated
 
 router = APIRouter(tags=["stat"])
 

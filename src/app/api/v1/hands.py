@@ -1,42 +1,24 @@
-from fastapi import APIRouter, Depends, Request, UploadFile, File, HTTPException, Query
-
-import traceback
-
-from ...models.hand_player import HandPlayer
-from ...models.hand import Hand
-from ...models.game import Game
-from ...models.player import Player
-
-from ...poker.parser.parser import Parser
-from ...poker.parser.hero_data import HeroData
-
 # from ...crud.crud_hand import crud_hands
 from pprint import pprint
+from typing import Annotated, Set
+
+from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
-from datetime import datetime
 
-
+from ...api import common
 from ...core.db.database import async_get_db
-
-from ...schemas.hand import HandCreate, HandReadText, HandBase, HandRakePot
-from ...schemas.hand_player import HandPlayerCreate, HandPlayerBase
-from ...schemas.player import PlayerCreate
-from ...schemas.game import GameCreate, GameReadCurrency
-from ...schemas.session import SessionCreate
-from ...schemas.account import AccountCreate
-
+from ...crud.crud_account import crud_account
+from ...crud.crud_game import crud_game
 from ...crud.crud_hand import crud_hands
 from ...crud.crud_hand_player import crud_hands_player
 from ...crud.crud_player import crud_player
-from ...crud.crud_game import crud_game
 from ...crud.crud_session import crud_session
-from ...crud.crud_account import crud_account
-
-from typing import List, Set, Annotated
-
-
-from ...api import common
-
+from ...poker.parser.parser import Parser
+from ...schemas.account import AccountCreate
+from ...schemas.game import GameCreate
+from ...schemas.hand import HandCreate, HandRakePot
+from ...schemas.player import PlayerCreate
+from ...schemas.session import SessionCreate
 
 router = APIRouter(tags=["hands"])
 

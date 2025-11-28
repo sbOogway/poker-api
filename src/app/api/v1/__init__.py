@@ -1,12 +1,11 @@
 from fastapi import APIRouter
 
+from .hands import router as hands_router
 from .login import router as login_router
 from .logout import router as logout_router
 from .players import router as player_router
-from .users import router as users_router
-from .hands import router as hands_router
 from .sessions import router as sessions_router
-
+from .users import router as users_router
 
 router = APIRouter(prefix="/v1")
 router.include_router(player_router)

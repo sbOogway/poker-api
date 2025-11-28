@@ -1,19 +1,13 @@
-import os
-import glob
 import re
+from abc import ABC, abstractmethod
+from collections.abc import Callable
+from datetime import datetime
+from decimal import Decimal
 
 # import pandas as pd
-import logging
-from typing import Tuple, List, Optional, Dict, Any, Callable, Self
+from typing import Any, Dict, List, Self, Tuple
+
 from .hero_data import HeroData
-from datetime import datetime, timezone
-from zoneinfo import ZoneInfo
-import tzlocal
-from pprint import pprint, pformat
-import traceback
-from decimal import Decimal
-from functools import wraps
-from abc import ABC, abstractmethod
 
 
 class Parser(ABC):
@@ -24,7 +18,7 @@ class Parser(ABC):
     blinds_pattern: str
     contribution_pattern: str
 
-        
+
     def register_mapper(self, site: str, cls: Self) -> Callable:
         self.site_mapper[site] = cls
 

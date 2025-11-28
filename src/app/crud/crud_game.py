@@ -1,15 +1,15 @@
 from fastcrud import FastCRUD
-
-from sqlalchemy import select, or_, and_
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from ..models.game import Game
 from ..schemas.game import (
     GameCreate,
     GameCreateInternal,
+    GameDelete,
     GameRead,
     GameUpdate,
     GameUpdateInternal,
-    GameDelete,
 )
 
 

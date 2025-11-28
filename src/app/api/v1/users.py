@@ -9,7 +9,7 @@ from ...core.db.database import async_get_db
 from ...core.exceptions.http_exceptions import DuplicateValueException, ForbiddenException, NotFoundException
 from ...core.security import blacklist_token, get_password_hash, oauth2_scheme
 from ...crud.crud_users import crud_users
-from ...schemas.user import UserCreate, UserCreateInternal, UserRead, UserTierUpdate, UserUpdate
+from ...schemas.user import UserCreate, UserCreateInternal, UserRead, UserUpdate
 
 router = APIRouter(tags=["users"])
 
@@ -95,7 +95,7 @@ async def patch_user(
     if values.email is not None and values.email != db_email:
         if await crud_users.exists(db=db, email=values.email):
             raise DuplicateValueException("Email is already registered")
- 
+
     if values.username is not None and values.username != db_username:
         if await crud_users.exists(db=db, username=values.username):
             raise DuplicateValueException("Username not available")

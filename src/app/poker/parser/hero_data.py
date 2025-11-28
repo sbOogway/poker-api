@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
-from typing import List
 from decimal import Decimal
+from typing import List
+
 
 @dataclass
 class HeroData:

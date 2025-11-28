@@ -1,11 +1,9 @@
-from ..core.db.database import Base
+from datetime import UTC, datetime
 
-from sqlalchemy import DateTime, ForeignKey, String, Boolean, JSON, Float, Integer
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import DateTime, Float, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from typing import List
-from datetime import UTC, datetime
+from ..core.db.database import Base
 
 
 class Session(Base):

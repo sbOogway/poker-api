@@ -1,12 +1,12 @@
-from fastapi import APIRouter, Depends, Request, UploadFile, File, HTTPException, Query
-from ...core.db.database import async_get_db
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from ...crud.crud_session import crud_session
+import json
 from typing import Annotated
 
+from fastapi import APIRouter, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from ...core.db.database import async_get_db
+from ...crud.crud_session import crud_session
 from ...schemas.session import SessionIdGameStartTime
-import json
 
 router = APIRouter(tags=["sessions"])
 

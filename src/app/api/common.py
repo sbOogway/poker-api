@@ -1,34 +1,24 @@
-from fastapi import Depends
-
-from pprint import pprint
-
-from sqlalchemy import text
-
-from ..models.hand import Hand
-from ..models.game import Game
-
-from ..schemas.game import GameCreate, GameReadCurrency
-from ..schemas.hand import HandCreate, HandReadText, HandBase, HandText
-from ..schemas.hand_player import HandPlayerCreate, HandPlayerEv, HandPlayerBase
-
-from typing import Annotated
-
-from sqlalchemy.ext.asyncio import AsyncSession
-from ..core.db.database import async_get_db
-
-from ..crud.crud_hand import crud_hands
-from ..crud.crud_hand_player import crud_hands_player
-
-from ..poker.parser.parser import Parser, HeroData
-
+import json
 import re
 
 # parser = Parser()
 import subprocess
-import ast
-import json
-
 from decimal import Decimal
+from typing import Annotated
+
+from fastapi import Depends
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from ..core.db.database import async_get_db
+from ..crud.crud_hand import crud_hands
+from ..crud.crud_hand_player import crud_hands_player
+from ..models.game import Game
+from ..models.hand import Hand
+from ..poker.parser.parser import HeroData, Parser
+from ..schemas.game import GameReadCurrency
+from ..schemas.hand import HandBase, HandReadText
+from ..schemas.hand_player import HandPlayerBase, HandPlayerCreate
 
 hand_joined_hand_player_kwargs = dict(
     join_model=Hand,
@@ -173,7 +163,7 @@ def calculate_ev_street(
     except KeyError:
         pass
     opps_contributions = sum(c.values())
-    
+
     # opps_contributios = re.findall()
 
     command_args = []
@@ -273,7 +263,7 @@ async def calculate_ev_showdown(
                 continue
             hole_cards = "".join(hole_cards)
             cards[hole_cards] = player
-        
+
         hero_cards = ''.join(parser.extract_hero_hole_cards(hand, player_id))
         cards[hero_cards] = player_id
 

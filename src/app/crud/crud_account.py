@@ -1,15 +1,15 @@
 from fastcrud import FastCRUD
-
-from sqlalchemy import select, or_, and_
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from ..models.account import Account
 from ..schemas.account import (
     AccountCreate,
     AccountCreateInternal,
+    AccountDelete,
     AccountRead,
     AccountUpdate,
     AccountUpdateInternal,
-    AccountDelete,
 )
 
 
