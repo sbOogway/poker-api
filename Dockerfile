@@ -17,7 +17,7 @@ WORKDIR /app
 # Copy the project source code
 COPY . /app
 
-COPY bin/equity /bin/equity
+RUN wget https://github.com/sbOogway/poker-equity/releases/download/prod/main -O /bin/equity
 
 RUN uv lock
 
