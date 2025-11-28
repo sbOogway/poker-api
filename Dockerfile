@@ -14,7 +14,7 @@ WORKDIR /app
 #     uv sync --no-install-project
 
 RUN apt upgrade && apt update
-RUN apt install wget
+RUN apt install wget -y
 
 
 # Copy the project source code
