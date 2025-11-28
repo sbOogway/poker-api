@@ -8,5 +8,4 @@ from .category import Category
 from .game import Game
 from .session import Session
 
-from .report import Report
 from .stat import Stat
