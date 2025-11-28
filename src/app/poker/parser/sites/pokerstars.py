@@ -10,8 +10,8 @@ from ..hero_data import HeroData
 class PokerStars(Parser):
     site: str = "PokerStars"
     pattern: str = r"PokerStars"
-    blinds_pattern: str = r".* posts.*blind.*([\d\.]+)"
-    contribution_pattern: str = r"(.*): (?:bets|raises|calls) .([\d\.]+).*"
+    blinds_pattern: str = r".* posts.*blind..([\d\.]+)"
+    contribution_pattern: str = r"(.*): (?:bets|raises|calls).* .([\d\.]+).*"
 
     @staticmethod
     def register():
@@ -685,7 +685,7 @@ class PokerStars(Parser):
             # logger.error(f"Error parsing hand: {e}")
             return HeroData(
                 hand_id="",
-                timestamp=datetime.now(),
+                # timestamp=datetime.now(),
                 site="Unknown",
                 stakes="",
                 table_name="",
@@ -695,7 +695,14 @@ class PokerStars(Parser):
                 players=[],
             )
 
-    
+    @staticmethod
+    def extract_streets_text(hand_text: str):
+        # print(len(hand_text.split("*** ")))
+        pre = hand_text.split("*** HOLE CARDS ***")[1].split("*** FLOP ***")[0]
+        flop = hand_text.split("*** FLOP ***")[1].split("*** TURN ***")[0]
+        turn = hand_text.split("*** TURN ***")[1].split("*** RIVER ***")[0]
+        river = hand_text.split("*** RIVER ***")[1].split("*** SHOW DOWN ***")[0]
+        return "", pre, flop, turn, river
 
 
 

@@ -200,8 +200,8 @@ def calculate_ev_street(
 
     # equities = {k: Decimal(str(v)) for k, v in equities.items()}
 
-    # print(equities)
-    # print(cards)
+    # print(street)
+    print(cards)
     hero_cards = [k for k, v in cards.items() if v == player][0]
 
     hero_equity = Decimal("0.00")
@@ -215,7 +215,12 @@ def calculate_ev_street(
             ) / len(equities)
 
     # hero_equity = list(filter(lambda x: x[hero_cards]["win"], equities))[0]
-    # print(hero_equity)
+    print(hero_equity)
+    print(pot)
+    print(c)
+    print(opps_contributions)
+    print("pot", pot)
+    print("hero contrib",hero_contributions)
 
     opps_contributions += pot
 
@@ -231,7 +236,7 @@ async def calculate_ev_showdown(
 ):
 
     query = text(
-        "select text from hand h  where (h.went_to_showdown is true and (h.text like '%' || :player_id || ' shows %' or h.text like '%' || :player_id  || ' mucks%' ));"
+        "select text from hand h  where (h.went_to_showdown is true and (h.text like '%' || :player_id || ' show %' or h.text like '%' || :player_id  || ' muck%' ));"
     )
 
     hands = await db.execute(query, {"player_id": player_id})
@@ -268,6 +273,9 @@ async def calculate_ev_showdown(
                 continue
             hole_cards = "".join(hole_cards)
             cards[hole_cards] = player
+        
+        hero_cards = ''.join(parser.extract_hero_hole_cards(hand, player_id))
+        cards[hero_cards] = player_id
 
         # print(command)
 
@@ -313,6 +321,7 @@ async def calculate_ev_showdown(
             player_id__eq=player_id
 
         )
+        return True
     #     return hand
 
     #     print(turn_ev)

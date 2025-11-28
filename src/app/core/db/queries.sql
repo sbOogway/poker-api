@@ -11,7 +11,7 @@ having count(*) > 150;
 
 -- calculate ev on showdowns
 select text, ev_pre, ev_flop, ev_turn, ev_river, ev_pre+ev_flop+ev_turn+ev_river as ev_total, net_profit
-from hand h join hand_player hp on h.id = hp.hand_id  where (h.went_to_showdown is true and (h.text like '%' || :player_id || ' shows %' or h.text like '%' || :player_id  || ' mucks%' ))
+from hand h join hand_player hp on h.id = hp.hand_id  where (h.went_to_showdown is true and (h.text like '%' || :player_id || ' show%' or h.text like '%' || :player_id  || ' muck%' ))
 UNION ALL
 SELECT
     'TOTALS' AS text,
@@ -26,8 +26,8 @@ JOIN hand_player hp ON h.id = hp.hand_id
 WHERE
     h.went_to_showdown IS TRUE
     AND (
-        h.text LIKE '%' || :player_id || ' shows %'
-        OR h.text LIKE '%' || :player_id || ' mucks%'
+        h.text LIKE '%' || :player_id || ' show%'
+        OR h.text LIKE '%' || :player_id || ' muck%'
     );
    
    ORDER BY CASE WHEN text = 'TOTALS' THEN 1 ELSE 0 END, text;
